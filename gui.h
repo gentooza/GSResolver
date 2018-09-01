@@ -24,6 +24,7 @@ along with GSResolver.  If not, see <https://www.gnu.org/licenses/>.
 #include <stdlib.h>
 #include <termios.h>
 #include <ncurses.h>
+#include <time.h>
 
 #include "defines.h"
 #include "cell.h"
@@ -72,11 +73,14 @@ class gui
   gui(std::string appVersion);
   ~gui();
 
+  void initGui();
+  
   int getOption();
 
   void imagineBadThings();
 
   void showInfo();
+  void showGui();
   void showOptions();
   void clear(){clearScreen();};
   
@@ -89,6 +93,10 @@ class gui
  private:
   std::vector <std::string> vBadThings;
   std::string sVersion;
+  WINDOW *win_title;
+  WINDOW *win_info;
+  WINDOW *win_options;
+  WINDOW *win_map;
 };
 
 #endif

@@ -36,13 +36,26 @@ int getInt(){
 
 gui::gui(std::string appVersion)
 {
+  initscr();
   imagineBadThings();
-  disable_waiting_for_enter();
   sVersion = appVersion;
+  win_title = NULL;
+  win_info = NULL;
+  win_options = NULL;
+  win_map = NULL;
   return;
 }
 gui::~gui()
 {
+  endwin();
+  if(win_title)
+    delete win_title;
+  if(win_info)
+    delete win_info;
+  if(win_options)
+    delete win_options;
+  if(win_map)
+    delete win_map;
   return;
 }
 
@@ -226,12 +239,30 @@ void gui::showCurrent(cell **myCells, std::vector <std::string> status)
 }
 void gui::showInfo()
 {
-  std::cout << "Welcome to gentooza's sudoku resolver, version: " << sVersion << "!" << std::endl;
-  std::cout << "this program is Free (libre) software developed under the GPLv3+" << std::endl;
-  std::cout << "it's offered with a lot of love and no warranties at all, it could never solve your fuc$%/= sudoku, or worse! ";
+  printw("Welcome to gentooza's sudoku resolver, version: %s !",sVersion.c_str());
+  mvprintw(2,0,"This program is Free (libre) software developed under the GPLv3+");
+  srand ( time(NULL) );
   std::string text = vBadThings.at(rand() % vBadThings.size());
-  std::cout << text << std::endl;
-  std::cout << "it's interesting as an experiment for plugins programming, you can add different algorithms easily for solving your sudokus" << std::endl;
+  mvprintw(4,0,"It's offered with a lot of love and no warranties at all, it could never solve your fuc$%/= sudoku, or worse! %s \nIt's interesting as an experiment for plugins programming, you can add different algorithms easily for solving your sudokus \n\n<PRESS ANY KEY TO CONTINUE>",text.c_str());
+
+  refresh();
+  getch();
+}
+
+void gui::initGui()
+{  
+  win_title = newwin(3,COLS,0,0);
+  box(win_title, 0 , 0);
+  
+  return;
+}
+
+
+void gui::showGui()
+{
+  wrefresh(win_title);
+  getch();
+  return;
 }
 
 void gui::showOptions()

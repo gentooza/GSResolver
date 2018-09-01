@@ -40,8 +40,15 @@ int main()
   resolver* ourResolver = new resolver();
   gui* ourGui = new gui(sVersion);
 
+  ourGui->initGui();
+  
   ourGui->showInfo();
- 
+
+  ourGui->showGui();
+  //implementing ncurses
+  delete ourGui;
+  return 0;
+  //
   values = ourGui->askForValues();
   
   ourResolver->setValues(values);
