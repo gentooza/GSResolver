@@ -23,6 +23,7 @@ along with GSResolver.  If not, see <https://www.gnu.org/licenses/>.
 #include <limits>
 #include <stdlib.h>
 #include <termios.h>
+#include <ncurses.h>
 
 #include "defines.h"
 #include "cell.h"

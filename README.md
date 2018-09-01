@@ -9,13 +9,19 @@ You have to create a folder inside methods with the same name as your .so librar
 
 cell.h and cell.cpp can already give you an idea of the fields map we pass as parameter to an algorithm
 
-#3- Please enjoy
+#3- Dependencies
+GSResolver is intended to be used with minimal dependencies in any actual GNU/Linux system.
+It depends on:
++ NCurses (under the X11 license)
++ GlibC 
+
+#4- Please enjoy
 It's only for having fun and learn!
 
-#4- Copyright
+#5- Copyright
 Copyright (C) 2018 Joaquín Cuéllar
 
-#5- License
+#6- License
 ```
 Gentooza's Sudokus Resolver is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
