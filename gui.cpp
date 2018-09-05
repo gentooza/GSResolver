@@ -48,14 +48,6 @@ gui::gui(std::string appVersion)
 gui::~gui()
 {
   endwin();
-  if(win_title)
-    delete win_title;
-  if(win_info)
-    delete win_info;
-  if(win_options)
-    delete win_options;
-  if(win_map)
-    delete win_map;
   return;
 }
 
