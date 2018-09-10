@@ -245,6 +245,10 @@ void gui::initGui()
 {  
   win_title = newwin(3,COLS,0,0);
   box(win_title, 0 , 0);
+  mvwprintw(win_title,1,2,"Gentooza\'s sudokus resolver, version:%s",sVersion.c_str());
+  win_options = newwin(ROWS,COLS/2,4,0);
+  box(win_options, '|', '*');
+  mvwprintw(win_options,1,2,"Options:");
   
   return;
 }
@@ -253,6 +257,7 @@ void gui::initGui()
 void gui::showGui()
 {
   wrefresh(win_title);
+  wrefresh(win_options);
   getch();
   return;
 }
