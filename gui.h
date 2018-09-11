@@ -48,13 +48,15 @@ enum options
 enum gui_status
   {
     GUI_MAIN = 0,
-    GUI_SUDOKU_EDITION
+    GUI_EDITION
   };
 
 enum message_types
   {
     MSG_FINISH = 0,
-    MSG_UNKNOWN
+    MSG_UNKNOWN,
+    MSG_CANCEL,
+    MSG_EDITION
   };
 
 static struct termios oldt;
@@ -114,7 +116,12 @@ class gui
   int isNotFinished(){return not_finished;};
 
   void print_message(char option, int msg_type);
-  
+
+  //////////////////////////////////////////////
+  //  changing states
+  void set_gui_main();
+  void set_gui_edition();
+
  private:
   std::vector <std::string> vBadThings;
   std::string sVersion;

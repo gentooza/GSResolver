@@ -293,10 +293,16 @@ void gui::draw_options(int state)
 
   switch(state)
     {
-    default:
-      mvwprintw(win_options,4,5,"e) Edit your sudoku");
+    case(GUI_EDITION):
+      mvwprintw(win_options,4,5,"[1-9] set this number to cell");
+      mvwprintw(win_options,5,5,"[arrow keys] select cell");
       ////quit
-      mvwprintw(win_options,8,5,"Q) Quit GSResolver");
+      mvwprintw(win_options,8,5,"[Q] Cancel   [S] Save");
+      break;
+    default:
+      mvwprintw(win_options,4,5,"[e] Edit your sudoku");
+      ////quit
+      mvwprintw(win_options,8,5,"[Q] Quit GSResolver");
       break;
     }
 }
@@ -344,6 +350,9 @@ void gui::draw_cursor(int state)
 {
   switch(state)
     {
+    case(GUI_EDITION):
+      wmove(win_map,5,5); //TODO, TEST
+      break;
     default:
       wmove(win_info,1,8);            
       break;
@@ -353,13 +362,38 @@ void gui::draw_cursor(int state)
 void gui::eval_input()
 {
   char option = getch();
-  switch(option)
+  if(gui_status == GUI_EDITION)
     {
-    case('Q'):
-      not_finished=0;
-      print_message('Q',MSG_FINISH);
-    default:
-      print_message(option,MSG_UNKNOWN);
+      switch(option)
+	{
+	case('Q'):
+	  print_message('Q',MSG_CANCEL);
+	  set_gui_main();
+	  break;
+	default:
+	  print_message(option,MSG_UNKNOWN);
+	  draw_info();
+	  break;
+	}
+    }
+  else
+    {
+      switch(option)
+	{
+	case('Q'):
+	  not_finished=0;
+	  print_message('Q',MSG_FINISH);
+	  draw_info();
+	  break;
+	case('e'):
+	  print_message('e',MSG_EDITION);
+	  set_gui_edition();
+	  break;
+	default:
+	  print_message(option,MSG_UNKNOWN);
+	  draw_info();
+	  break;
+	}
     }
 }
 
@@ -374,23 +408,45 @@ void gui::print_message(char option, int msg_type)
       new_message = option;
       new_message += " - ";
       new_message +="Closing, thanks for using GSResolver!";
-      my_information.push_back(new_message);
-      while(my_information.size()>6)
-	my_information.erase(my_information.begin());
-      draw_info();
+      break;
+    case(MSG_CANCEL):
+      new_message = option;
+      new_message += " - ";
+      new_message +="Canceled!";
+      break;
+    case(MSG_EDITION):
+      new_message = option;
+      new_message += " - ";
+      new_message +="going to sudoku edition!";
       break;
     default:
       new_message = option;
       new_message += " - ";
       new_message +="Sorry! Unknown option";
-      my_information.push_back(new_message);
-      while(my_information.size()>6)
-	my_information.erase(my_information.begin());
-      draw_info();
       break;
     };
-  
+  my_information.push_back(new_message);
+  while(my_information.size()>6)
+    my_information.erase(my_information.begin());
 
   return;
 
+}
+void gui::set_gui_main()
+{
+  gui_status = GUI_MAIN;
+  //OPTIONS
+  draw_options(gui_status);
+  //information feedback
+  draw_info();
+  draw_cursor(gui_status);
+}
+void gui::set_gui_edition()
+{
+  gui_status = GUI_EDITION;
+  //OPTIONS
+  draw_options(gui_status);
+  //information feedback
+  draw_info();
+  draw_cursor(gui_status);
 }
