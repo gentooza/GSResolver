@@ -45,6 +45,12 @@ enum options
   OPT_INVALID = 'x'
 };
 
+enum gui_status
+  {
+    GUI_MAIN = 0,
+    GUI_SUDOKU_EDITION
+  };
+
 static struct termios oldt;
 
 static void restore_terminal_settings(void)
@@ -90,9 +96,15 @@ class gui
 
   void showDescription();
 
+  void draw_title();
+  void draw_options(int state);
+  void draw_map();
+  void draw_info();
+
  private:
   std::vector <std::string> vBadThings;
   std::string sVersion;
+  std::vector<std::string> my_information;
   WINDOW *win_title;
   WINDOW *win_info;
   WINDOW *win_options;
