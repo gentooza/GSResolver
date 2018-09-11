@@ -101,10 +101,13 @@ class gui
   void draw_map();
   void draw_info();
 
+  void draw_cursor(int state);
+  
  private:
   std::vector <std::string> vBadThings;
   std::string sVersion;
   std::vector<std::string> my_information;
+  int gui_status;
   WINDOW *win_title;
   WINDOW *win_info;
   WINDOW *win_options;

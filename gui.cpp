@@ -243,14 +243,16 @@ void gui::showInfo()
 
 void gui::initGui()
 {
+  gui_status = GUI_MAIN;
   //TITLE
   draw_title();
   //OPTIONS
-  draw_options(GUI_MAIN);
+  draw_options(gui_status);
   //GAME MAP
   draw_map();
   //information feedback
   draw_info();
+  draw_cursor(gui_status);
   return;
 }
 
@@ -332,8 +334,19 @@ void gui::draw_info()
   int i = 0;
   for (iter = my_information.rbegin(); iter != my_information.rend() && i < 6; ++iter)
     {
-      mvwprintw(win_info,3+i,4,iter->c_str());
+      mvwprintw(win_info,4+i,4,iter->c_str());
       i++;
+    }
+
+}
+
+void gui::draw_cursor(int state)
+{
+  switch(state)
+    {
+    default:
+      wmove(win_info,1,8);            
+      break;
     }
 
 }
