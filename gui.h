@@ -51,6 +51,12 @@ enum gui_status
     GUI_SUDOKU_EDITION
   };
 
+enum message_types
+  {
+    MSG_FINISH = 0,
+    MSG_UNKNOWN
+  };
+
 static struct termios oldt;
 
 static void restore_terminal_settings(void)
@@ -102,12 +108,19 @@ class gui
   void draw_info();
 
   void draw_cursor(int state);
+
+  void eval_input();
+  
+  int isNotFinished(){return not_finished;};
+
+  void print_message(char option, int msg_type);
   
  private:
   std::vector <std::string> vBadThings;
   std::string sVersion;
   std::vector<std::string> my_information;
   int gui_status;
+  int not_finished;
   WINDOW *win_title;
   WINDOW *win_info;
   WINDOW *win_options;

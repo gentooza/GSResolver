@@ -37,12 +37,14 @@ int getInt(){
 gui::gui(std::string appVersion)
 {
   initscr();
+  noecho();
   imagineBadThings();
   sVersion = appVersion;
   win_title = NULL;
   win_info = NULL;
   win_options = NULL;
   win_map = NULL;
+  not_finished=1;
   return;
 }
 gui::~gui()
@@ -256,14 +258,12 @@ void gui::initGui()
   return;
 }
 
-
 void gui::showGui()
 {
   wrefresh(win_title);
   wrefresh(win_options);
   wrefresh(win_map);
   wrefresh(win_info);
-  getch();
   return;
 }
 
@@ -296,7 +296,7 @@ void gui::draw_options(int state)
     default:
       mvwprintw(win_options,4,5,"e) Edit your sudoku");
       ////quit
-      mvwprintw(win_options,9,5,"Q) Quit GSResolver");
+      mvwprintw(win_options,8,5,"Q) Quit GSResolver");
       break;
     }
 }
@@ -334,7 +334,7 @@ void gui::draw_info()
   int i = 0;
   for (iter = my_information.rbegin(); iter != my_information.rend() && i < 6; ++iter)
     {
-      mvwprintw(win_info,4+i,4,iter->c_str());
+      mvwprintw(win_info,3+i,4,iter->c_str());
       i++;
     }
 
@@ -348,5 +348,49 @@ void gui::draw_cursor(int state)
       wmove(win_info,1,8);            
       break;
     }
+}
+
+void gui::eval_input()
+{
+  char option = getch();
+  switch(option)
+    {
+    case('Q'):
+      not_finished=0;
+      print_message('Q',MSG_FINISH);
+    default:
+      print_message(option,MSG_UNKNOWN);
+    }
+}
+
+
+void gui::print_message(char option, int msg_type)
+{
+  std::string new_message;
+
+  switch(msg_type)
+    {
+    case(MSG_FINISH):
+      new_message = option;
+      new_message += " - ";
+      new_message +="Closing, thanks for using GSResolver!";
+      my_information.push_back(new_message);
+      while(my_information.size()>6)
+	my_information.erase(my_information.begin());
+      draw_info();
+      break;
+    default:
+      new_message = option;
+      new_message += " - ";
+      new_message +="Sorry! Unknown option";
+      my_information.push_back(new_message);
+      while(my_information.size()>6)
+	my_information.erase(my_information.begin());
+      draw_info();
+      break;
+    };
+  
+
+  return;
 
 }

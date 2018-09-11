@@ -36,6 +36,7 @@ int main()
   std::vector <std::string> status;
   int programOption;
   cell ** myCells;
+  char option;
 
   resolver* ourResolver = new resolver();
   gui* ourGui = new gui(sVersion);
@@ -45,6 +46,13 @@ int main()
   ourGui->showInfo();
 
   ourGui->showGui();
+
+  while(ourGui->isNotFinished())
+    {
+      ourGui->eval_input();
+      ourGui->showGui();      
+    }
+  
   //implementing ncurses
   delete ourGui;
   return 0;
