@@ -49,6 +49,7 @@ class cell
   std::string retPrettyStatus();
 
   int setPos(int col, int row);
+  int setCoordinates(int x, int y){GUI_coordinate_x=x; GUI_coordinate_y;};
   std::vector<int> retPos();
   
  private:
@@ -57,6 +58,8 @@ class cell
   std::vector <int> couldBe;
   int iRow;
   int iCol;
+  int GUI_coordinate_x;
+  int GUI_coordinate_y;
 };
 
 #endif

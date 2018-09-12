@@ -35,13 +35,14 @@ int main()
   std::vector< std::vector<int> > values;
   std::vector <std::string> status;
   int programOption;
-  cell ** myCells;
   char option;
-
   resolver* ourResolver = new resolver();
   gui* ourGui = new gui(sVersion);
+  cell ** myCells = new cell*[81];
+  for(int i=0;i<81;i++)
+    myCells[i] = new cell(0);
 
-  ourGui->initGui();
+  ourGui->initGui(myCells);
   
   ourGui->showInfo();
 
@@ -50,7 +51,7 @@ int main()
   while(ourGui->isNotFinished())
     {
       ourGui->eval_input();
-      ourGui->showGui();      
+      ourGui->showGui();
     }
   
   //implementing ncurses

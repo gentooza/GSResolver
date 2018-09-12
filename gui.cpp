@@ -243,15 +243,15 @@ void gui::showInfo()
   getch();
 }
 
-void gui::initGui()
+void gui::initGui(cell **& cells_map)
 {
   gui_status = GUI_MAIN;
   //TITLE
   draw_title();
   //OPTIONS
-  draw_options(gui_status);
+  draw_options(gui_status);  
   //GAME MAP
-  draw_map();
+  draw_map(cells_map);
   //information feedback
   draw_info();
   draw_cursor(gui_status);
@@ -260,10 +260,20 @@ void gui::initGui()
 
 void gui::showGui()
 {
+  draw_cursor(gui_status);
   wrefresh(win_title);
   wrefresh(win_options);
-  wrefresh(win_map);
-  wrefresh(win_info);
+  switch(gui_status)
+    {
+    case(GUI_EDITION):
+      wrefresh(win_info);
+      wrefresh(win_map);
+      break;
+    default:
+      wrefresh(win_map);
+      wrefresh(win_info);
+      break;
+    };
   return;
 }
 
@@ -307,7 +317,7 @@ void gui::draw_options(int state)
     }
 }
 
-void gui::draw_map()
+void gui::draw_map(cell **& cells_map)
 {
   win_map = newwin(22,COLS/2,1,(COLS/2));
   box(win_map, '|', '*');
@@ -328,6 +338,7 @@ void gui::draw_map()
   mvwvline(win_map,3, 24,'I',17);
   mvwvline(win_map,3, 28,'|',17);
   mvwvline(win_map,3, 32,'|',17);
+  print_values(cells_map,2, 3);
 }
 
 void gui::draw_info()
@@ -351,7 +362,7 @@ void gui::draw_cursor(int state)
   switch(state)
     {
     case(GUI_EDITION):
-      wmove(win_map,5,5); //TODO, TEST
+      wmove(win_map,4,1); //TODO, TEST
       break;
     default:
       wmove(win_info,1,8);            
@@ -397,6 +408,26 @@ void gui::eval_input()
     }
 }
 
+void   gui::print_values(cell **& cells_map,int start_x, int start_y)
+{
+  int index = 0;
+  int coordinate_x,coordinate_y;
+  
+  coordinate_x = start_x;
+  coordinate_y = start_y;
+  for(int row = 1; row <= 9; row++)
+    {
+      for(int column = 1; column <= 9; column++)
+	{
+	  cells_map[index]->setCoordinates(coordinate_x,coordinate_y);
+	  if(cells_map[index]->retValue())
+	    mvwprintw(win_map,coordinate_y,coordinate_x,"%d",cells_map[index]->retValue());
+	  coordinate_x+=4;
+	  index++;
+	}
+      coordinate_y+=2;
+    }	
+}
 
 void gui::print_message(char option, int msg_type)
 {
@@ -432,6 +463,10 @@ void gui::print_message(char option, int msg_type)
   return;
 
 }
+
+
+
+
 void gui::set_gui_main()
 {
   gui_status = GUI_MAIN;
@@ -439,7 +474,7 @@ void gui::set_gui_main()
   draw_options(gui_status);
   //information feedback
   draw_info();
-  draw_cursor(gui_status);
+  //draw_cursor(gui_status);
 }
 void gui::set_gui_edition()
 {
@@ -448,5 +483,5 @@ void gui::set_gui_edition()
   draw_options(gui_status);
   //information feedback
   draw_info();
-  draw_cursor(gui_status);
+  //draw_cursor(gui_status);
 }

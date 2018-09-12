@@ -87,7 +87,7 @@ class gui
   gui(std::string appVersion);
   ~gui();
 
-  void initGui();
+  void initGui(cell**& cells_map);
   
   int getOption();
 
@@ -106,7 +106,7 @@ class gui
 
   void draw_title();
   void draw_options(int state);
-  void draw_map();
+  void draw_map(cell **& cells_map);
   void draw_info();
 
   void draw_cursor(int state);
@@ -116,6 +116,7 @@ class gui
   int isNotFinished(){return not_finished;};
 
   void print_message(char option, int msg_type);
+  void print_values(cell **& cells_map,int start_x, int start_y);
 
   //////////////////////////////////////////////
   //  changing states
