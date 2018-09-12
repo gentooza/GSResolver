@@ -98,7 +98,6 @@ class gui
   void showOptions();
   void clear(){clearScreen();};
   
-  std::vector< std::vector<int> > askForValues();
   void showCurrent(std::vector< std::vector<std::string> > values,std::vector <std::string> status);
   void showCurrent(cell **myCells, std::vector <std::string> status);
 
@@ -111,7 +110,7 @@ class gui
 
   void draw_cursor(int state);
 
-  void eval_input();
+  int evalInput();
   
   int isNotFinished(){return not_finished;};
 

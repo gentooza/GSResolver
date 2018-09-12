@@ -93,63 +93,6 @@ void gui::imagineBadThings()
   //...
 }
 
-std::vector< std::vector<int> >  gui::askForValues()
-{
-  int value;
-  std::vector< std::vector<int> > ourSudoku;
-  std::vector<int> row;
-  std::vector< std::vector<int> >::iterator ourSudokuIter;
-  std::vector<int>::iterator rowIter;  
-
-  std::cout << "*********************************************************************************" << std::endl;
-
-  for(int i=1; i<10;i++)
-    {
-      row.clear();
-      for(int j=1; j<10;j++)
-	{
-	  std::cout <<"Insert value ("<<i<<","<<j<<"):"<<std::endl;
-	  value = getInt();
-	  while(value <0)
-	    {
-	      std::cout <<"Insert value ("<<i<<","<<j<<"), please a value between 1 and 9, or 0 if empty:"<<std::endl;
-	      value = getInt();
-	    }
-	  row.push_back(value);
-	  clearScreen();
-	  std::cout << "inserted value:" << value << std::endl;
-	  std::cout << "*********************************************************************************" << std::endl;
-	  if(ourSudoku.size()>0)
-	    {
-	      for(ourSudokuIter = ourSudoku.begin(); ourSudokuIter != ourSudoku.end(); ++ourSudokuIter)
-		{
-		  for(rowIter = ourSudokuIter->begin(); rowIter != ourSudokuIter->end(); ++rowIter)
-		    {
-		      if(*rowIter != 0)
-			std::cout << *rowIter;
-		      else
-			std::cout << " ";
-		      std::cout << "        ";
-		    }
-		  std::cout << std::endl;
-		}
-	    }
-	  for(rowIter = row.begin(); rowIter != row.end(); ++rowIter)
-	    {
-	      if(*rowIter != 0)
-		std::cout << *rowIter;
-	      else
-		std::cout << " ";
-	      std::cout << "        ";
-	    }
-	  std::cout << std::endl;	  
-	}
-      ourSudoku.push_back(row);
-    }
-  
-  return ourSudoku;
-}
-
 void gui::showCurrent(std::vector< std::vector<std::string> > values,std::vector <std::string> status)
 {
   std::vector< std::vector<std::string> >::iterator rowIter;
@@ -370,8 +313,9 @@ void gui::draw_cursor(int state)
     }
 }
 
-void gui::eval_input()
+int gui::evalInput()
 {
+  int action_to_do = 0;
   char option = getch();
   if(gui_status == GUI_EDITION)
     {
@@ -406,6 +350,7 @@ void gui::eval_input()
 	  break;
 	}
     }
+  return action_to_do;
 }
 
 void   gui::print_values(cell **& cells_map,int start_x, int start_y)

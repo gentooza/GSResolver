@@ -35,7 +35,7 @@ int main()
   std::vector< std::vector<int> > values;
   std::vector <std::string> status;
   int programOption;
-  char option;
+  int action_to_do;
   resolver* ourResolver = new resolver();
   gui* ourGui = new gui(sVersion);
   cell ** myCells = new cell*[81];
@@ -50,7 +50,7 @@ int main()
 
   while(ourGui->isNotFinished())
     {
-      ourGui->eval_input();
+      action_to_do = ourGui->evalInput();
       ourGui->showGui();
     }
   
@@ -58,7 +58,6 @@ int main()
   delete ourGui;
   return 0;
   //
-  values = ourGui->askForValues();
   
   ourResolver->setValues(values);
 
