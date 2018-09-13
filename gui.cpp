@@ -192,7 +192,6 @@ void gui::draw_cursor(int state,cell **& my_cells)
     case(GUI_EDITION):
       wmove(win_map, my_cells[selected_cell]->ret_y(),my_cells[selected_cell]->ret_x());
       keypad(win_map,TRUE);
-      selected_cell=1;
       break;
     default:
       wmove(win_info,1,8);
@@ -268,13 +267,15 @@ void   gui::print_values(cell **& cells_map,int start_x, int start_y)
     {
       for(int column = 1; column <= 9; column++)
 	{
-	  cells_map[index]->setCoordinates(coordinate_x,coordinate_y);
+	  cells_map[index]->set_coordinates(coordinate_x,coordinate_y);
+	  cells_map[index]->set_position(column,row);
 	  if(cells_map[index]->retValue())
 	    mvwprintw(win_map,coordinate_y,coordinate_x,"%d",cells_map[index]->retValue());
 	  coordinate_x+=4;
 	  index++;
 	}
       coordinate_y+=2;
+      coordinate_x=start_x;
     }	
 }
 

@@ -72,10 +72,10 @@ int cell::setValue(int value)
     }
   return failed;
 }
-int cell::setPos(int col, int row)
+int cell::set_position(int col, int row)
 {
   //TODO constants here
-  if((row >= 0 && row < 9) && (col >= 0 && col < 9))
+  if((row > 0 && row <= 9) && (col > 0 && col <= 9))
     {
       iRow = row;
       iCol = col;

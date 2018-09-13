@@ -41,7 +41,7 @@ resolver::~resolver()
   return;
 }
 
-int  resolver::setValues(std::vector< std::vector<int> > values)
+int  resolver::setValues(std::vector< std::vector<int> > values) //TODO, its not needed anymore
 {
   std::vector< std::vector<int> >::iterator rowIterator;
   std::vector<int>::iterator cellIterator;
@@ -56,7 +56,6 @@ int  resolver::setValues(std::vector< std::vector<int> > values)
 	if(i<sudoku_size)
 	  {
 	    myCells[i]->setValue(*cellIterator);
-	    myCells[i]->setPos(col,row);
 	  }
 	i++;
 	col++;
