@@ -53,32 +53,6 @@ gui::~gui()
   return;
 }
 
-int gui::getOption()
-{
-   int ch = 0;
-   ch = getchar();
-   if (ch == 'r') //resolve round
-     clearScreen();
-   else if (ch =='R') //resolve all
-       clearScreen();
-   else if(ch == 'v')
-       clearScreen();
-   else if (ch == 'Q')
-     {
-       std::cout << std::endl;
-       std::cout << "Thanks for using Gentooza's Sudokus Resolver, have a very nice day!" << std::endl;
-     }
-   else if (ch =='s')
-     clearScreen();
-   //   else if(ch == 'c') TODO CHANGE
-   else
-     {
-       ch = 'x';
-     }
-
-   return ch;
-}
-
 void gui::imagineBadThings()
 {
   vBadThings.clear();
@@ -93,87 +67,6 @@ void gui::imagineBadThings()
   //...
 }
 
-void gui::showCurrent(std::vector< std::vector<std::string> > values,std::vector <std::string> status)
-{
-  std::vector< std::vector<std::string> >::iterator rowIter;
-  std::vector<std::string>::iterator fieldIter;
-  
-  std::cout <<"*********************************************************************************" << std::endl;
-  std::cout<<std::endl;
-  for(fieldIter = status.begin(); fieldIter != status.end(); ++fieldIter)
-    std::cout << *fieldIter << std::endl;
-  std::cout<<std::endl;
-  for(rowIter = values.begin(); rowIter != values.end(); ++rowIter)
-    {
-      for(fieldIter = rowIter->begin(); fieldIter != rowIter->end(); ++fieldIter)
-	{
-	  std::cout << " ";
-	  std::cout << *fieldIter;
-	  std::cout << " |";
-	}
-      std::cout << "|" << std::endl;
-    }
-  std::cout <<"*********************************************************************************" << std::endl;
-}
-
-void gui::showCurrent(cell **myCells, std::vector <std::string> status)
-{
-  int i,j;
-  int index = 0;
-  std::vector<std::string>::iterator fieldIter;
-  std::vector <int>::iterator couldBeIter;
-  std::vector <int> cellCouldBe;
-  const int space = 9;
-  int currentSpace = 0;
-  std::cout <<"*****************************************************************************************" << std::endl;
-  std::cout<<std::endl;
-  for(fieldIter = status.begin(); fieldIter != status.end(); ++fieldIter)
-    std::cout << *fieldIter << std::endl;
-  std::cout<<std::endl;
-  for(i = 0; i < ROWS; i++)
-    {
-      for(j= 0; j < COLUMNS; j++)
-	{
-	  if(index < sudoku_size)
-	    {
-	      currentSpace = 0;
-	      if(!myCells[index]->retDefined())
-		{
-		  cellCouldBe = myCells[index]->retCouldBe();
-		  if(myCells[index]->hasSollution())
-		    {
-		      std::cout << "(";
-		      currentSpace++;
-		    }
-		  for(couldBeIter = cellCouldBe.begin(); couldBeIter != cellCouldBe.end(); ++couldBeIter)
-		    {
-		      std::cout << std::to_string(*couldBeIter);
-		      currentSpace++;
-		    }
-		  if(myCells[index]->hasSollution())
-		    {
-		      std::cout << ")";
-		      currentSpace++;
-		    }
-		}
-	      else
-		{
-		  currentSpace++;
-		  std::cout << std::to_string(myCells[index]->retValue());
-		}
-	      while(currentSpace <= space)
-		{
-		  std::cout << " ";
-		  currentSpace++;
-		}
-	    }
-	  index++;
-	}
-      std::cout << std::endl;
-      j = 0;
-    }
-  std::cout <<"*****************************************************************************************" << std::endl;
-}
 void gui::showInfo()
 {
   printw("Welcome to gentooza's sudoku resolver, version: %s !",sVersion.c_str());
@@ -197,13 +90,13 @@ void gui::initGui(cell **& cells_map)
   draw_map(cells_map);
   //information feedback
   draw_info();
-  draw_cursor(gui_status);
+  draw_cursor(gui_status,cells_map);
   return;
 }
 
-void gui::showGui()
+void gui::showGui(cell **& my_cells)
 {
-  draw_cursor(gui_status);
+  draw_cursor(gui_status,my_cells);
   wrefresh(win_title);
   wrefresh(win_options);
   switch(gui_status)
@@ -218,14 +111,6 @@ void gui::showGui()
       break;
     };
   return;
-}
-
-void gui::showOptions()
-{
-  std::cout << "-> Press 'r' to solve one round" << std::endl;
-  std::cout << "-> Press 'R' to solve everything at once" << std::endl;
-  std::cout << "-> Press 'v' to show program's info and version" << std::endl;
-  std::cout << "-> Press 'Q' to quit" << std::endl;  
 }
 
 void gui::draw_title()
@@ -300,23 +185,26 @@ void gui::draw_info()
 
 }
 
-void gui::draw_cursor(int state)
+void gui::draw_cursor(int state,cell **& my_cells)
 {
   switch(state)
     {
     case(GUI_EDITION):
-      wmove(win_map,4,1); //TODO, TEST
+      wmove(win_map, my_cells[selected_cell]->ret_y(),my_cells[selected_cell]->ret_x());
+      keypad(win_map,TRUE);
+      selected_cell=1;
       break;
     default:
-      wmove(win_info,1,8);            
+      wmove(win_info,1,8);
+      keypad(win_map,FALSE);    
       break;
     }
 }
 
-int gui::evalInput()
+int gui::evalInput(cell ** map_cells)
 {
   int action_to_do = 0;
-  char option = getch();
+  int option = getch();
   if(gui_status == GUI_EDITION)
     {
       switch(option)
@@ -324,6 +212,18 @@ int gui::evalInput()
 	case('Q'):
 	  print_message('Q',MSG_CANCEL);
 	  set_gui_main();
+	  break;
+	case(KEY_LEFT):
+	  move_left(map_cells);	  
+	  break;
+	case(KEY_RIGHT):
+	  move_right(map_cells);	  
+	  break;
+	case(KEY_UP):
+	  move_up(map_cells);  
+	  break;
+	case(KEY_DOWN):
+	  move_down(map_cells);	  
 	  break;
 	default:
 	  print_message(option,MSG_UNKNOWN);
@@ -409,7 +309,85 @@ void gui::print_message(char option, int msg_type)
 
 }
 
+//actions on cells functions
+int  gui::move_left(cell **&cells_map)
+{
+  int ret = -1;
+  int my_col;
+  //if not the first one, or out of bounds
+  if(selected_cell > 0 && selected_cell < 81)
+    {
+      my_col = cells_map[selected_cell]->ret_col();
+      //if not in the left edge
+      if(my_col > 1)
+	{
+	  ret = selected_cell-1;
+	  selected_cell = ret;
+	}
+    }
+  return ret;
+}
 
+int  gui::move_right(cell **&cells_map)
+{
+  int ret = -1;
+  int my_col;
+  //if not the last one, or out of bounds
+  if(selected_cell >= 0 && selected_cell < 80)
+    {
+      my_col = cells_map[selected_cell]->ret_col();
+      //if not in the right edge
+      if(my_col < 9)
+	{
+	  ret = selected_cell+1;
+	  selected_cell = ret;
+	}
+    }
+  return ret;
+}
+
+int  gui::move_up(cell **&cells_map)
+{
+  int ret = -1;
+  int my_row;
+  //if not in the first row, or out of bounds
+  if(selected_cell > 8 && selected_cell < 81)
+    {
+      my_row = cells_map[selected_cell]->ret_row();
+      //if not in the upper edge
+      if(my_row > 1)
+	{
+	  ret = selected_cell-9;
+	  selected_cell = ret;
+	}
+    }
+  return ret;
+}
+
+int  gui::move_down(cell **&cells_map)
+{
+  int ret = -1;
+  int my_row;
+  //if not in the first row, or out of bounds
+  if(selected_cell >= 0 && selected_cell <= 71)
+    {
+      my_row = cells_map[selected_cell]->ret_row();
+      //if not in the bottom edge
+      if(my_row < 9)
+	{
+	  ret = selected_cell+9;
+	  selected_cell = ret;
+	}
+    }
+  return ret;
+
+}
+
+int gui::set_value(cell **&cells_map, int value)
+{
+  return 0;
+}
+////////////////
 
 
 void gui::set_gui_main()

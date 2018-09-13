@@ -37,89 +37,27 @@ int main()
   int programOption;
   int action_to_do;
   resolver* ourResolver = new resolver();
-  gui* ourGui = new gui(sVersion);
-  cell ** myCells = new cell*[81];
+  gui* our_gui = new gui(sVersion);
+  cell ** cells_map = new cell*[81];
   for(int i=0;i<81;i++)
-    myCells[i] = new cell(0);
+    cells_map[i] = new cell(0);
 
-  ourGui->initGui(myCells);
-  
-  ourGui->showInfo();
+  our_gui->initGui(cells_map);  
+  our_gui->showInfo();
+  our_gui->showGui(cells_map);
 
-  ourGui->showGui();
-
-  while(ourGui->isNotFinished())
+  while(our_gui->isNotFinished())
     {
-      action_to_do = ourGui->evalInput();
-      ourGui->showGui();
+      action_to_do = our_gui->evalInput(cells_map);
+      our_gui->showGui(cells_map);
     }
   
-  //implementing ncurses
-  delete ourGui;
-  return 0;
-  //
-  
-  ourResolver->setValues(values);
-
-  ourResolver->loadMethods();
-
-  values.clear();
-
-  myCells = ourResolver->getCurrentCells();
-  ourResolver->getCurrentStatus(status);
-  ourGui->clear();
-  ourGui->showCurrent(myCells,status);
-  ourGui->showOptions();
-  /* Key reading loop */
-  while (1)
-    {
-      
-      programOption = ourGui->getOption();            
-      if (programOption == OPT_RESOLVE) //resolve round
-	{
-	  if(ourResolver->analyze())
-	    ourResolver->resolveOne();
-	    	  
-	  myCells = ourResolver->getCurrentCells();
-	  ourResolver->getCurrentStatus(status);
-	  ourGui->showCurrent(myCells,status);
-	  ourResolver->clearStatus();
-	  ourGui->showOptions();
-	}
-      else if (programOption == OPT_RESOLVE_ALL) //resolve all
-	{
-	  while(ourResolver->analyze())
-	    {
-	      myCells = ourResolver->getCurrentCells();
-	      ourResolver->getCurrentStatus(status);
-	      ourGui->showCurrent(myCells,status);
-	      ourResolver->resolveOne();
-	      newValues.clear();
-	    }
-	  newValues = ourResolver->getCurrent();
-	  ourResolver->getCurrentStatus(status);
-	  ourGui->showCurrent(newValues,status);
-	  ourGui->showOptions();
-	}
-      else if(programOption == OPT_VERSION)
-	{
-	  newValues = ourResolver->getCurrent();
-	  ourResolver->getCurrentStatus(status);
-	  ourGui->showCurrent(newValues,status);
-	  ourGui->showInfo();
-	  ourGui->showOptions();
-	}
-      else if (programOption == OPT_QUIT)
-	{
-	  delete ourResolver;
-	  delete ourGui;
-	  return 0;  /* Press 'Q' to quit program */
-	}
-    }  
-
+  delete our_gui;
   delete ourResolver;
-  delete ourGui;
-  
+  for (int i=80 ; i>=0; i--)
+    delete cells_map[i];
+  delete cells_map;
+
   return 0;
 }
 

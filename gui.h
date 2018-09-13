@@ -94,12 +94,7 @@ class gui
   void imagineBadThings();
 
   void showInfo();
-  void showGui();
-  void showOptions();
-  void clear(){clearScreen();};
-  
-  void showCurrent(std::vector< std::vector<std::string> > values,std::vector <std::string> status);
-  void showCurrent(cell **myCells, std::vector <std::string> status);
+  void showGui(cell **& my_cells);
 
   void showDescription();
 
@@ -108,14 +103,22 @@ class gui
   void draw_map(cell **& cells_map);
   void draw_info();
 
-  void draw_cursor(int state);
+  void draw_cursor(int state,cell **& my_cells);
 
-  int evalInput();
+  int evalInput( cell ** map_cells);
   
   int isNotFinished(){return not_finished;};
 
   void print_message(char option, int msg_type);
   void print_values(cell **& cells_map,int start_x, int start_y);
+
+  //ACTIONS ON CELLS
+  int  move_left(cell **&cells_map);
+  int  move_right(cell **&cells_map);
+  int  move_up(cell **&cells_map);
+  int  move_down(cell **&cells_map);
+  int  set_value(cell **&cells_map, int value);
+  //
 
   //////////////////////////////////////////////
   //  changing states
@@ -128,6 +131,7 @@ class gui
   std::vector<std::string> my_information;
   int gui_status;
   int not_finished;
+  int selected_cell;
   WINDOW *win_title;
   WINDOW *win_info;
   WINDOW *win_options;

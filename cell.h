@@ -49,7 +49,13 @@ class cell
   std::string retPrettyStatus();
 
   int setPos(int col, int row);
+  int ret_col(){return iCol;};
+  int ret_row(){return iRow;};
+  
   int setCoordinates(int x, int y){GUI_coordinate_x=x; GUI_coordinate_y;};
+  int ret_y(){return GUI_coordinate_y;};
+  int ret_x(){return GUI_coordinate_x;};
+  
   std::vector<int> retPos();
   
  private:
