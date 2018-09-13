@@ -201,12 +201,14 @@ void gui::draw_cursor(int state,cell **& my_cells)
     }
 }
 
-int gui::evalInput(cell ** map_cells)
+int gui::eval_keyboard_input(cell ** map_cells)
 {
   int action_to_do = 0;
-  int option = getch();
+  int option;
+  /*when editing the cells map*/
   if(gui_status == GUI_EDITION)
     {
+      option = wgetch(win_map);
       switch(option)
 	{
 	case('Q'):
@@ -231,8 +233,10 @@ int gui::evalInput(cell ** map_cells)
 	  break;
 	}
     }
+  /*at main screen*/
   else
     {
+      option = wgetch(win_info);
       switch(option)
 	{
 	case('Q'):

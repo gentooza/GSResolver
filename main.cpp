@@ -48,7 +48,7 @@ int main()
 
   while(our_gui->isNotFinished())
     {
-      action_to_do = our_gui->evalInput(cells_map);
+      action_to_do = our_gui->eval_keyboard_input(cells_map);
       our_gui->showGui(cells_map);
     }
   

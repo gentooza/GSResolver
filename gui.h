@@ -105,7 +105,7 @@ class gui
 
   void draw_cursor(int state,cell **& my_cells);
 
-  int evalInput( cell ** map_cells);
+  int eval_keyboard_input( cell ** map_cells);
   
   int isNotFinished(){return not_finished;};
 
