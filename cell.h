@@ -52,7 +52,7 @@ class cell
   int ret_col(){return iCol;};
   int ret_row(){return iRow;};
   
-  int set_coordinates(int x, int y){GUI_coordinate_x=x; GUI_coordinate_y;};
+  int set_coordinates(int x, int y){GUI_coordinate_x=x; GUI_coordinate_y=y;};
   int ret_y(){return GUI_coordinate_y;};
   int ret_x(){return GUI_coordinate_x;};
   
