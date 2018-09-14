@@ -132,13 +132,13 @@ void gui::draw_options(int state)
   switch(state)
     {
     case(GUI_EDITION):
-      mvwprintw(win_options,4,5,"[1-9] set this number to cell");
-      mvwprintw(win_options,5,5,"[arrow keys] select cell");
+      mvwprintw(win_options,3,5,"[1-9] set this number to cell");
+      mvwprintw(win_options,4,5,"[arrow keys] select cell");
       ////quit
       mvwprintw(win_options,8,5,"[Q] Return");
       break;
     default:
-      mvwprintw(win_options,4,5,"[e] Edit your sudoku");
+      mvwprintw(win_options,3,5,"[e] Edit your sudoku");
       mvwprintw(win_options,4,5,"[p] Manage plugins");
       ////quit
       mvwprintw(win_options,8,5,"[Q] Quit GSResolver");
