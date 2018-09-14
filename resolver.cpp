@@ -55,7 +55,7 @@ int  resolver::setValues(std::vector< std::vector<int> > values) //TODO, its not
       {
 	if(i<sudoku_size)
 	  {
-	    myCells[i]->setValue(*cellIterator);
+	    myCells[i]->set_value(*cellIterator);
 	  }
 	i++;
 	col++;

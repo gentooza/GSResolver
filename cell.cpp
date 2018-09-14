@@ -54,7 +54,7 @@ cell::cell()
   return;
 }
 
-int cell::setValue(int value)
+int cell::set_value(int value)
 {
   int failed = 1;
   if(value > 0  && value < 10)
@@ -120,7 +120,7 @@ int cell::solve()
     {
       if(couldBe.size() == 1)
 	{
-	  setValue(couldBe.at(0));
+	  set_value(couldBe.at(0));
 	  solved = 1;
 	}
     }

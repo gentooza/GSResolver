@@ -28,6 +28,7 @@ along with GSResolver.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "defines.h"
 #include "cell.h"
+#include "tools.h"
 
 #ifndef _GUI_
 #define _GUI_
@@ -109,6 +110,7 @@ class gui
   
   int isNotFinished(){return not_finished;};
 
+  void print_message(std::string text);
   void print_message(char option, int msg_type);
   void print_values(cell **& cells_map,int start_x, int start_y);
 

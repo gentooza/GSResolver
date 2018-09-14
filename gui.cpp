@@ -135,10 +135,11 @@ void gui::draw_options(int state)
       mvwprintw(win_options,4,5,"[1-9] set this number to cell");
       mvwprintw(win_options,5,5,"[arrow keys] select cell");
       ////quit
-      mvwprintw(win_options,8,5,"[Q] Cancel   [S] Save");
+      mvwprintw(win_options,8,5,"[Q] Return");
       break;
     default:
       mvwprintw(win_options,4,5,"[e] Edit your sudoku");
+      mvwprintw(win_options,4,5,"[p] Manage plugins");
       ////quit
       mvwprintw(win_options,8,5,"[Q] Quit GSResolver");
       break;
@@ -200,7 +201,7 @@ void gui::draw_cursor(int state,cell **& my_cells)
     }
 }
 
-int gui::eval_keyboard_input(cell ** map_cells)
+int gui::eval_keyboard_input(cell ** cells_map)
 {
   int action_to_do = 0;
   int option;
@@ -215,16 +216,65 @@ int gui::eval_keyboard_input(cell ** map_cells)
 	  set_gui_main();
 	  break;
 	case(KEY_LEFT):
-	  move_left(map_cells);	  
+	  move_left(cells_map);	  
 	  break;
 	case(KEY_RIGHT):
-	  move_right(map_cells);	  
+	  move_right(cells_map);	  
 	  break;
 	case(KEY_UP):
-	  move_up(map_cells);  
+	  move_up(cells_map);  
 	  break;
 	case(KEY_DOWN):
-	  move_down(map_cells);	  
+	  move_down(cells_map);	  
+	  break;
+	case('0'):
+	  set_value(cells_map, 0);
+	  draw_map(cells_map);
+	  break;
+	case('1'):
+	  set_value(cells_map, 1);
+	  draw_info();
+	  draw_map(cells_map);
+	  break;	  
+	case('2'):
+	  set_value(cells_map, 2);
+	  draw_info();
+	  draw_map(cells_map);
+	  break;
+	case('3'):
+	  set_value(cells_map, 3);
+	  draw_info();
+	  draw_map(cells_map);
+	  break;	  
+	case('4'):
+	  set_value(cells_map, 4);
+	  draw_info();
+	  draw_map(cells_map);
+	  break;
+	case('5'):
+	  set_value(cells_map, 5);
+	  draw_info();
+	  draw_map(cells_map);
+	  break;
+	case('6'):
+	  set_value(cells_map, 6);
+	  draw_info();
+	  draw_map(cells_map);
+	  break;
+	case('7'):
+	  set_value(cells_map, 7);
+	  draw_info();
+	  draw_map(cells_map);
+	  break;
+	case('8'):
+	  set_value(cells_map, 8);
+	  draw_info();
+	  draw_map(cells_map);
+	  break;
+	case('9'):
+	  set_value(cells_map, 9);
+	  draw_info();
+	  draw_map(cells_map);
 	  break;
 	default:
 	  print_message(option,MSG_UNKNOWN);
@@ -269,14 +319,25 @@ void   gui::print_values(cell **& cells_map,int start_x, int start_y)
 	{
 	  cells_map[index]->set_coordinates(coordinate_x,coordinate_y);
 	  cells_map[index]->set_position(column,row);
-	  if(cells_map[index]->retValue())
-	    mvwprintw(win_map,coordinate_y,coordinate_x,"%d",cells_map[index]->retValue());
+	  if(cells_map[index]->ret_value())
+	    mvwprintw(win_map,coordinate_y,coordinate_x,"%d",cells_map[index]->ret_value());
 	  coordinate_x+=4;
 	  index++;
 	}
       coordinate_y+=2;
       coordinate_x=start_x;
     }	
+}
+
+void gui::print_message(std::string text)
+{
+
+  my_information.push_back(text);
+  while(my_information.size()>6)
+    my_information.erase(my_information.begin());
+
+  return;
+
 }
 
 void gui::print_message(char option, int msg_type)
@@ -390,7 +451,48 @@ int  gui::move_down(cell **&cells_map)
 
 int gui::set_value(cell **&cells_map, int value)
 {
-  return 0;
+  int ret = -1;
+  std::string message;
+  int by_two=0;
+  if(value >=0 && value <=9)
+    {
+      if(value == 0)
+	{
+	  ret=0;
+	  cells_map[selected_cell]->set_value(value);
+	  //print_message("value to 0");
+	}
+      else
+	{
+	  message = "cell ";
+	  message += std::to_string(selected_cell);
+	  message += " val ";
+	  message += std::to_string(value);
+
+	  ret = tools_value_possible(cells_map,selected_cell,value);
+	  if(ret > 0)
+	    {
+	      message += "... possible!";
+	      cells_map[selected_cell]->set_value(value);
+	      ret=0;
+	    }
+	  else
+	    {
+	      if(ret == 0)
+		message += "... not possible! value 0";
+	      else if(ret == -1)
+		message += "... not possible! section!";
+	      else if(ret == -2)
+		message += "... not possible! row!";
+	      else if(ret == -3)
+		message += "... not possible! column!";
+	      else
+		message += "... not possible! unknown!";
+	    }
+	  print_message(message);
+	}
+    }
+  return ret;
 }
 ////////////////
 

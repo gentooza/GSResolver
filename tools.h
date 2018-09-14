@@ -17,11 +17,18 @@ You should have received a copy of the GNU General Public License
 along with GSResolver.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#include "section.h"
+#include <iostream>
+#include "cell.h"
+#include "defines.h"
+#include <cstring>
 
 
-section::section()
-{
+#ifndef _TOOLS_
+#define _TOOLS_
 
-  return;
-}
+int tools_value_possible_in_col(cell **& cells_map,int selected_cell,int value);
+int tools_value_possible_in_row(cell **& cells_map,int selected_cell,int value);
+int tools_value_possible_in_section(cell **& cells_map,int selected_cell,int value);
+int tools_value_possible(cell **& cells_map,int selected_cell,int value);
+
+#endif

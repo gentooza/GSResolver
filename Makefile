@@ -16,8 +16,8 @@
 #along with GSResolver.  If not, see <https://www.gnu.org/licenses/>.
 
 CXXFLAGS=-std=c++11
-GSResolver:main.cpp resolver.cpp gui.cpp cell.cpp methodsManager.cpp resolver.h gui.h cell.h methodsManager.h ./methods/resolvMethod.h
-	$(CXX) $(CXXFLAGS) -o GSResolver main.cpp resolver.cpp gui.cpp cell.cpp methodsManager.cpp -ldl -lncurses
+GSResolver:main.cpp tools.cpp resolver.cpp gui.cpp cell.cpp methodsManager.cpp resolver.h gui.h cell.h methodsManager.h ./methods/resolvMethod.h
+	$(CXX) $(CXXFLAGS) -o GSResolver main.cpp tools.cpp resolver.cpp gui.cpp cell.cpp methodsManager.cpp -ldl -lncurses
 
 clean:
 	rm -f GSResolver

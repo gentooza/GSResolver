@@ -23,6 +23,7 @@ along with GSResolver.  If not, see <https://www.gnu.org/licenses/>.
 #define _MY_DEFINES_
 
 const int sudoku_size = 81;
+const int SUDOKU_SIZE = 81;
 const int COLUMNS = 9;
 const int ROWS = 9;
 #endif

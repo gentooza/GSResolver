@@ -36,8 +36,8 @@ class cell
   cell();
   ~cell(){return;};
 
-  int setValue(int value);
-  int retValue(){return iValue;};
+  int set_value(int value);
+  int ret_value(){return iValue;};
   int setDefined(int newDefined){defined = newDefined;};
   int retDefined(){return defined;};
   int setCouldBe(std::vector <int> newCouldBe){couldBe = newCouldBe;};
