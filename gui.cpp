@@ -94,8 +94,9 @@ void gui::initGui(cell **& cells_map)
   return;
 }
 
-void gui::showGui(cell **& my_cells)
+void gui::show_gui(cell **& my_cells,std::vector<struct method_info> information)
 {
+  
   draw_cursor(gui_status,my_cells);
   wrefresh(win_title);
   wrefresh(win_options);
@@ -109,7 +110,7 @@ void gui::showGui(cell **& my_cells)
       wrefresh(win_map);
       wrefresh(win_info);
       break;
-    };
+      };
   return;
 }
 
@@ -183,7 +184,6 @@ void gui::draw_info()
       mvwprintw(win_info,3+i,4,iter->c_str());
       i++;
     }
-
 }
 
 void gui::draw_cursor(int state,cell **& my_cells)

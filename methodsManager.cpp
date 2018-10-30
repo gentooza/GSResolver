@@ -53,9 +53,7 @@ void method::refresh_info()
       name = "N/A";
       description = "N/A";
     }
-
 }
-
 
 void methodsManager::searchFolders(std::vector <std::string>  & folders)
 {
@@ -79,17 +77,15 @@ void methodsManager::searchFolders(std::vector <std::string>  & folders)
 }
 void methodsManager::freePlugins()
 {
-  std::vector <void*>::reverse_iterator iter;
-
-  if(vMethodsInSystem.size())
+  if(num_methods)
     {
-      for(iter =  vMethodsInSystem.rbegin(); iter != vMethodsInSystem.rend(); ++iter)
+      for(int i=num_methods-1; i >= 0;i--)
 	{
-	  if(*iter)
-	    dlclose(*iter);
+	  delete my_methods[i];
 	}
+      free(my_methods);      
     }
-  vMethodsInSystem.clear();
+  
   return;
 }
 
@@ -99,6 +95,7 @@ void methodsManager::loadPlugins()
   std::vector <std::string>::iterator iter; 
 
   freePlugins();
+  num_methods = 0;
   searchFolders(pluginList);
   if(pluginList.size())
     {
@@ -124,7 +121,9 @@ void methodsManager::loadPlugins()
 	      my_methods[i]->load();
 	      std::cout << "INFO: plugin loaded " << path << std::endl;
 	    }
+	  i++;
 	}
+      num_methods = i+1;
     }
   dlerror();
 }

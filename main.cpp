@@ -36,15 +36,17 @@ int main()
   std::vector <std::string> status;
   int programOption;
   int action_to_do;
-  resolver* ourResolver = new resolver();
+  resolver* our_resolver = new resolver();
   gui* our_gui = new gui(sVersion);
   cell ** cells_map = new cell*[81];
   for(int i=0;i<81;i++)
     cells_map[i] = new cell(0);
 
+  std::vector<struct method_info> methods_information;
+  
   our_gui->initGui(cells_map);  
   our_gui->showInfo();
-  our_gui->showGui(cells_map);
+  our_gui->show_gui(cells_map,methods_information);
 
   while(our_gui->isNotFinished())
     {
@@ -52,13 +54,15 @@ int main()
       //If we are loading plugin management screen, load our plugin managment system information
       if(action_to_do == GUI_PLUGIN_MANAGEMENT) 
 	{
-
+	  methods_information.clear();
+	  methods_information = our_resolver->load_methods();
 	}
-      our_gui->showGui(cells_map);
+      our_gui->show_gui(cells_map,methods_information);
+
     }
   
   delete our_gui;
-  delete ourResolver;
+  delete our_resolver;
   for (int i=80 ; i>=0; i--)
     delete cells_map[i];
   delete cells_map;

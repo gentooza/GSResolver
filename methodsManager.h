@@ -53,7 +53,7 @@ class method
 class methodsManager
 {
  public:
-  methodsManager(){};
+  methodsManager(){num_methods = 0;};
   ~methodsManager(){};
 
   void loadPlugins();
@@ -66,6 +66,7 @@ class methodsManager
   void freePlugins();
  private:
   method** my_methods;
+  int num_methods;
   std::vector <void*> vMethodsInSystem;
   std::vector <void*>::iterator viActualMethod;
   create_t* create_pluginInstance;

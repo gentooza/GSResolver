@@ -36,7 +36,7 @@ class resolver
   resolver();
   ~resolver();
 
-  void loadMethods(){myPluginManager->loadPlugins();};
+  std::vector<struct method_info> load_methods(){myPluginManager->loadPlugins();};
   
   int setValues(std::vector< std::vector<int> > values);
   int analyze();

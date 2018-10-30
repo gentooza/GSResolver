@@ -26,4 +26,13 @@ const int sudoku_size = 81;
 const int SUDOKU_SIZE = 81;
 const int COLUMNS = 9;
 const int ROWS = 9;
+
+struct method_info
+{
+  std::string name;
+  std::string description;
+  int loaded;
+  std::string status;
+};
+
 #endif

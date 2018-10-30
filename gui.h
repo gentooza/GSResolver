@@ -99,8 +99,9 @@ class gui
   void imagineBadThings();
 
   void showInfo();
-  void showGui(cell **& my_cells);
-
+  //REFRESHING GUI
+  void show_gui(cell **& my_cells,std::vector<struct method_info> information);
+  //
   void showDescription();
 
   void draw_title();
