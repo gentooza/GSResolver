@@ -27,6 +27,29 @@ along with GSResolver.  If not, see <https://www.gnu.org/licenses/>.
 
 #include"./methods/resolvMethod.h"
 
+class method
+{
+ public:
+  method(){my_so = NULL; is_loaded=0; priority = -1;};
+  ~method(){if(my_so){free(my_so);}};
+
+  void set_path(std::string path){full_path = path;};
+  
+  void *my_so;
+  void load();
+  void refresh_info();
+ private:
+  std::string name;
+  std::string description;
+  std::string full_path;
+  int is_loaded;
+  int priority;
+  create_t* create_pluginInstance;
+  destroy_t* destroy_pluginInstance;
+};
+
+
+
 class methodsManager
 {
  public:
@@ -42,6 +65,7 @@ class methodsManager
   void searchFolders(std::vector <std::string> &);
   void freePlugins();
  private:
+  method** my_methods;
   std::vector <void*> vMethodsInSystem;
   std::vector <void*>::iterator viActualMethod;
   create_t* create_pluginInstance;

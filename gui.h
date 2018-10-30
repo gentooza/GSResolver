@@ -43,13 +43,16 @@ enum options
   OPT_QUIT = 'Q',
   OPT_STEP = 's',
   OPT_CHANGE = 'c',
-  OPT_INVALID = 'x'
+  OPT_INVALID = 'x',
+  OPT_EDITION = 'e',
+  OPT_PLUGIN_MANAGEMENT = 'p'
 };
 
 enum gui_status
   {
     GUI_MAIN = 0,
-    GUI_EDITION
+    GUI_EDITION,
+    GUI_PLUGIN_MANAGEMENT
   };
 
 enum message_types
@@ -57,7 +60,8 @@ enum message_types
     MSG_FINISH = 0,
     MSG_UNKNOWN,
     MSG_CANCEL,
-    MSG_EDITION
+    MSG_EDITION,
+    MSG_PLUGIN_MANAGEMENT
   };
 
 static struct termios oldt;
@@ -124,9 +128,8 @@ class gui
 
   //////////////////////////////////////////////
   //  changing states
-  void set_gui_main();
-  void set_gui_edition();
-
+  void set_gui_state(int state);
+  
  private:
   std::vector <std::string> vBadThings;
   std::string sVersion;

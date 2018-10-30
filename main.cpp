@@ -49,6 +49,11 @@ int main()
   while(our_gui->isNotFinished())
     {
       action_to_do = our_gui->eval_keyboard_input(cells_map);
+      //If we are loading plugin management screen, load our plugin managment system information
+      if(action_to_do == GUI_PLUGIN_MANAGEMENT) 
+	{
+
+	}
       our_gui->showGui(cells_map);
     }
   

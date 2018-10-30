@@ -139,7 +139,7 @@ void gui::draw_options(int state)
       break;
     default:
       mvwprintw(win_options,3,5,"[e] Edit your sudoku");
-      mvwprintw(win_options,4,5,"[p] Manage plugins");
+      mvwprintw(win_options,4,5,"[p] Manage resolve methods");
       ////quit
       mvwprintw(win_options,8,5,"[Q] Quit GSResolver");
       break;
@@ -213,7 +213,7 @@ int gui::eval_keyboard_input(cell ** cells_map)
 	{
 	case('Q'):
 	  print_message('Q',MSG_CANCEL);
-	  set_gui_main();
+	  set_gui_state(GUI_MAIN);
 	  break;
 	case(KEY_LEFT):
 	  move_left(cells_map);	  
@@ -295,7 +295,12 @@ int gui::eval_keyboard_input(cell ** cells_map)
 	  break;
 	case('e'):
 	  print_message('e',MSG_EDITION);
-	  set_gui_edition();
+	  set_gui_state(GUI_EDITION);
+	  break;
+	case('p'):
+	  print_message('p',MSG_PLUGIN_MANAGEMENT);
+	  set_gui_state(GUI_PLUGIN_MANAGEMENT);
+	  action_to_do = GUI_PLUGIN_MANAGEMENT;
 	  break;
 	default:
 	  print_message(option,MSG_UNKNOWN);
@@ -361,6 +366,11 @@ void gui::print_message(char option, int msg_type)
       new_message += " - ";
       new_message +="going to sudoku edition!";
       break;
+    case(MSG_PLUGIN_MANAGEMENT):
+      new_message = option;
+      new_message += " - ";
+      new_message +="going to resolve methods system!";
+      break; 
     default:
       new_message = option;
       new_message += " - ";
@@ -496,22 +506,12 @@ int gui::set_value(cell **&cells_map, int value)
 }
 ////////////////
 
+void gui::set_gui_state(int state)
+{
+  gui_status = state;
+  //OPTIONS
+  draw_options(gui_status);
+  //information feedback
+  draw_info();
+}
 
-void gui::set_gui_main()
-{
-  gui_status = GUI_MAIN;
-  //OPTIONS
-  draw_options(gui_status);
-  //information feedback
-  draw_info();
-  //draw_cursor(gui_status);
-}
-void gui::set_gui_edition()
-{
-  gui_status = GUI_EDITION;
-  //OPTIONS
-  draw_options(gui_status);
-  //information feedback
-  draw_info();
-  //draw_cursor(gui_status);
-}

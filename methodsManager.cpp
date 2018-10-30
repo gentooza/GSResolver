@@ -19,6 +19,44 @@ along with GSResolver.  If not, see <https://www.gnu.org/licenses/>.
 
 #include"methodsManager.h"
 
+void method::load()
+{
+  if(my_so)
+    {
+      int is_loaded=1;
+      // load the symbols
+      create_pluginInstance = (create_t*) dlsym(my_so, "create");
+      const char* dlsym_error = dlerror();
+      if (dlsym_error) {
+	std::cerr << "ERR: Cannot load symbol create: " << dlsym_error << '\n';
+        is_loaded= 0;
+      }
+      destroy_pluginInstance = (destroy_t*) dlsym(my_so, "destroy");
+      dlsym_error = dlerror();
+      if (dlsym_error) {
+	std::cerr << "ERR: Cannot load symbol destroy: " << dlsym_error << '\n';
+        is_loaded= 0;
+      }    
+    }
+}
+
+void method::refresh_info()
+{
+  if(is_loaded)
+    {
+      resolvMethod* myMethod = create_pluginInstance();
+      name = myMethod->retMethodName();
+      description = myMethod->retMethodDescription();
+    }
+  else
+    {
+      name = "N/A";
+      description = "N/A";
+    }
+
+}
+
+
 void methodsManager::searchFolders(std::vector <std::string>  & folders)
 {
   folders.clear();
@@ -62,29 +100,32 @@ void methodsManager::loadPlugins()
 
   freePlugins();
   searchFolders(pluginList);
-
-  for(iter = pluginList.begin(); iter != pluginList.end(); ++iter)
+  if(pluginList.size())
     {
-      std::string path = "./methods/";
-      path += *iter;
-      path += "/";
-      path += *iter;
-      path += ".so";
-      void * plugin =  dlopen(path.c_str(), RTLD_LAZY);
-      if (!plugin) {
-	std::cerr << "ERR: Cannot load library: " << path << " error: " << dlerror() << '\n';
-      }
-      else
+      my_methods = new method*[pluginList.size()];
+      int i=0;
+      for(iter = pluginList.begin(); iter != pluginList.end(); ++iter)
 	{
-	  std::cout << "INFO: plugin loaded " << path << std::endl;
-	  vMethodsInSystem.push_back(plugin);
+	  std::string path = "./methods/";
+	  path += *iter;
+	  path += "/";
+	  path += *iter;
+	  path += ".so";
+	  my_methods[i] = new method();
+	  my_methods[i]->set_path(path);
+	  my_methods[i]->my_so =  dlopen(path.c_str(), RTLD_LAZY);
+	  
+	  if (!my_methods[i]->my_so)
+	    {
+	      std::cerr << "ERR: Cannot load library: " << path << " error: " << dlerror() << '\n';
+	    }
+	  else
+	    {
+	      my_methods[i]->load();
+	      std::cout << "INFO: plugin loaded " << path << std::endl;
+	    }
 	}
     }
-  if(vMethodsInSystem.size()>0)
-    viActualMethod = vMethodsInSystem.end();
-  else
-    viActualMethod = vMethodsInSystem.begin();
- 
   dlerror();
 }
 
