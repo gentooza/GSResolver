@@ -144,7 +144,7 @@ void methodsManager::loadPlugins()
 	  my_methods[i]->set_status(status);
 	  i++;
 	}
-      num_methods = i+1;
+      num_methods = i;
     }
 }
 
