@@ -41,6 +41,16 @@ resolver::~resolver()
   return;
 }
 
+std::vector<struct method_info> resolver::load_methods()
+{
+  std::vector<struct method_info> information;
+  
+  myPluginManager->loadPlugins();
+  information = myPluginManager->ret_plugins_information();
+
+  return information;
+}
+
 int  resolver::setValues(std::vector< std::vector<int> > values) //TODO, its not needed anymore
 {
   std::vector< std::vector<int> >::iterator rowIterator;

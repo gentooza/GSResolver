@@ -105,6 +105,10 @@ void gui::show_gui(cell **& my_cells,std::vector<struct method_info> information
       wrefresh(win_info);
       wrefresh(win_map);
       break;
+    case(GUI_PLUGIN_MANAGEMENT):
+      wrefresh(win_info);
+      wrefresh(win_map);
+      break;
     default:
       wrefresh(win_map);
       wrefresh(win_info);
@@ -308,6 +312,7 @@ int gui::eval_keyboard_input(cell ** cells_map,std::vector<struct method_info> i
   //in plugin management screen
   else if (gui_status == GUI_PLUGIN_MANAGEMENT)
     {
+      option = wgetch(win_info);
       switch(option)
 	{
 	case('Q'):

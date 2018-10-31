@@ -40,6 +40,12 @@ class method
   void *my_so;
   int load();
   void refresh_info();
+
+  std::string ret_name(){return name;};
+  std::string ret_description(){return description;};
+  std::string ret_status(){return status;};
+  int ret_is_loaded(){return is_loaded;};
+    
  private:
   std::string name;
   std::string description;
@@ -63,6 +69,8 @@ class methodsManager
   int useMethod(cell **& myCells, int & sollution, std::string & status);
   resolvMethod* createMethod();
   void destroyMethod(resolvMethod*);
+
+  std::vector<struct method_info> ret_plugins_information();
 
  protected:
   void searchFolders(std::vector <std::string> &);

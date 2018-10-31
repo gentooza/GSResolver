@@ -204,6 +204,17 @@ int methodsManager::useMethod(cell **& myCells, int & sollution, std::string & s
 
 }
 
+std::vector<struct method_info> methodsManager::ret_plugins_information()
+{
+  std::vector<struct method_info> information;
+  for(int i=0; i <num_methods; i++)
+    {
+      information.push_back({my_methods[i]->ret_name(),my_methods[i]->ret_description(), my_methods[i]->ret_is_loaded(), my_methods[i]->ret_status()});
+    }
+  return information;
+
+}
+
 resolvMethod* methodsManager::createMethod()
 {
   return create_pluginInstance();
@@ -214,3 +225,4 @@ void methodsManager::destroyMethod(resolvMethod* myPlugin)
   if (myPlugin)
     destroy_pluginInstance(myPlugin);
 }
+
