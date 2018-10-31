@@ -35,14 +35,16 @@ class method
   ~method(){if(my_so){free(my_so);}};
 
   void set_path(std::string path){full_path = path;};
+  void set_status(std::string new_status){status = new_status;};
   
   void *my_so;
-  void load();
+  int load();
   void refresh_info();
  private:
   std::string name;
   std::string description;
   std::string full_path;
+  std::string status;
   int is_loaded;
   int priority;
   create_t* create_pluginInstance;

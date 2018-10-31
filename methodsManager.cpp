@@ -19,8 +19,9 @@ along with GSResolver.  If not, see <https://www.gnu.org/licenses/>.
 
 #include"methodsManager.h"
 
-void method::load()
+int method::load()
 {
+  int ret = -1;  
   if(my_so)
     {
       int is_loaded=1;
@@ -38,6 +39,9 @@ void method::load()
         is_loaded= 0;
       }    
     }
+  if(is_loaded)
+    ret = 0;
+  return ret;
 }
 
 void method::refresh_info()
@@ -118,21 +122,30 @@ void methodsManager::loadPlugins()
 	  my_methods[i] = new method();
 	  my_methods[i]->set_path(path);
 	  my_methods[i]->my_so =  dlopen(path.c_str(), RTLD_LAZY);
-	  
+
+	  std::string status = "Plugin correctly loaded";
 	  if (!my_methods[i]->my_so)
 	    {
-	      std::cerr << "ERR: Cannot load library: " << path << " error: " << dlerror() << '\n';
+	      status = "ERR: Cannot load library: ";
+	      status += path;
+	      status += " CAUSE: ";
+	      status += dlerror();
+	      my_methods[i]->set_status(status);
 	    }
 	  else
 	    {
-	      my_methods[i]->load();
-	      std::cout << "INFO: plugin loaded " << path << std::endl;
+	      if(my_methods[i]->load())
+		{
+		  status = "ERR: Cannot Load library: ";
+		  status += path;
+		  status += " CAUSE: Bad plugin format, not following standards";
+		}
 	    }
+	  my_methods[i]->set_status(status);
 	  i++;
 	}
       num_methods = i+1;
     }
-  dlerror();
 }
 
 int methodsManager::useMethod(cell **& myCells, int & sollution, std::string & status)
