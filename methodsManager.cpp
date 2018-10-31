@@ -67,7 +67,14 @@ void methodsManager::searchFolders(std::vector <std::string>  & folders)
   while (entry != NULL)
     {
       if (entry->d_type == DT_DIR)
-	folders.push_back(entry->d_name);
+	if(strlen(entry->d_name) > 4)
+	  {
+	    if(!(entry->d_name[strlen(entry->d_name) - 1] == '.' && entry->d_name[strlen(entry->d_name) - 2] == '.' && entry->d_name[strlen(entry->d_name) - 3] == '/'))
+	      {
+		if(!(entry->d_name[strlen(entry->d_name) - 1] == '.' && entry->d_name[strlen(entry->d_name) - 2] == '/'))	
+		  folders.push_back(entry->d_name);
+	      }
+	  }
       entry = readdir(dir);
     }
 

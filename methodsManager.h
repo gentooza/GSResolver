@@ -24,6 +24,7 @@ along with GSResolver.  If not, see <https://www.gnu.org/licenses/>.
 #include <vector>
 #include <dirent.h>
 #include <iterator>
+#include <string.h>
 
 #include"./methods/resolvMethod.h"
 
