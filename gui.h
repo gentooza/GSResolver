@@ -107,17 +107,20 @@ class gui
   void draw_title();
   void draw_options(int state);
   void draw_map(cell **& cells_map);
+  void draw_plugins(std::vector<struct method_info> information);
   void draw_info();
 
   void draw_cursor(int state,cell **& my_cells);
 
-  int eval_keyboard_input( cell ** map_cells);
+  int eval_keyboard_input( cell ** map_cells,std::vector<struct method_info> information);
   
   int isNotFinished(){return not_finished;};
 
   void print_message(std::string text);
   void print_message(char option, int msg_type);
   void print_values(cell **& cells_map,int start_x, int start_y);
+  void print_plugins(std::vector<struct method_info> information,int start_x, int start_y , int width);
+  int  print_one_plugin(struct method_info method,int coordinate_x, int coordinate_y , int width);
 
   //ACTIONS ON CELLS
   int  move_left(cell **&cells_map);
@@ -138,6 +141,7 @@ class gui
   int gui_status;
   int not_finished;
   int selected_cell;
+  int selected_plugin;
   WINDOW *win_title;
   WINDOW *win_info;
   WINDOW *win_options;

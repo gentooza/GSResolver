@@ -96,7 +96,6 @@ void gui::initGui(cell **& cells_map)
 
 void gui::show_gui(cell **& my_cells,std::vector<struct method_info> information)
 {
-  
   draw_cursor(gui_status,my_cells);
   wrefresh(win_title);
   wrefresh(win_options);
@@ -138,6 +137,14 @@ void gui::draw_options(int state)
       ////quit
       mvwprintw(win_options,8,5,"[Q] Return");
       break;
+    case(GUI_PLUGIN_MANAGEMENT):
+      mvwprintw(win_options,3,5,"[arrow keys] select method");
+      mvwprintw(win_options,4,5,"[1-100] change usage order position");
+      mvwprintw(win_options,5,5,"[l] reload method");
+      mvwprintw(win_options,6,5,"[u] unload method");     
+      ////quit
+      mvwprintw(win_options,8,5,"[Q] Return");
+      break;
     default:
       mvwprintw(win_options,3,5,"[e] Edit your sudoku");
       mvwprintw(win_options,4,5,"[p] Manage resolve methods");
@@ -171,6 +178,22 @@ void gui::draw_map(cell **& cells_map)
   print_values(cells_map,2, 3);
 }
 
+void gui::draw_plugins(std::vector<struct method_info> information)
+{
+  win_map = newwin(22,COLS/2,1,(COLS/2));
+  box(win_map, '|', '*');
+  mvwprintw(win_map,1,2,"Your Plugins:");
+  if(selected_plugin > 3)
+    {
+      mvwprintw(win_map,3,3,"**more**");
+    }
+  if(information.size() - selected_plugin > 0)
+    {
+      mvwprintw(win_map,3,18,"**more**");
+    }
+  print_plugins(information, 5,4,COLS/2-2); 
+}
+
 void gui::draw_info()
 {
   std::vector<std::string>::reverse_iterator iter;
@@ -201,7 +224,7 @@ void gui::draw_cursor(int state,cell **& my_cells)
     }
 }
 
-int gui::eval_keyboard_input(cell ** cells_map)
+int gui::eval_keyboard_input(cell ** cells_map,std::vector<struct method_info> information)
 {
   int action_to_do = 0;
   int option;
@@ -282,6 +305,22 @@ int gui::eval_keyboard_input(cell ** cells_map)
 	  break;
 	}
     }
+  //in plugin management screen
+  else if (gui_status == GUI_PLUGIN_MANAGEMENT)
+    {
+      switch(option)
+	{
+	case('Q'):
+	  print_message('Q',MSG_CANCEL);
+	  draw_map(cells_map);
+	  set_gui_state(GUI_MAIN);
+	  break;
+	default:
+	  print_message(option,MSG_UNKNOWN);
+	  draw_info();
+	  break;
+	}
+    }	  
   /*at main screen*/
   else
     {
@@ -300,7 +339,9 @@ int gui::eval_keyboard_input(cell ** cells_map)
 	case('p'):
 	  print_message('p',MSG_PLUGIN_MANAGEMENT);
 	  set_gui_state(GUI_PLUGIN_MANAGEMENT);
+	  selected_plugin=-1;
 	  action_to_do = GUI_PLUGIN_MANAGEMENT;
+	  draw_plugins(information);
 	  break;
 	default:
 	  print_message(option,MSG_UNKNOWN);
@@ -332,6 +373,90 @@ void   gui::print_values(cell **& cells_map,int start_x, int start_y)
       coordinate_y+=2;
       coordinate_x=start_x;
     }	
+}
+/*!print plugins in map window*/
+void   gui::print_plugins(std::vector<struct method_info> information,int start_x, int start_y , int width)
+{
+  int index = 0;
+  int coordinate_x,coordinate_y;
+  
+  coordinate_x = start_x;
+  coordinate_y = start_y;
+  if(selected_plugin < information.size())
+    {
+      if(selected_plugin <=2)
+	{	  
+	  if(!information.size())
+	    {
+	      mvwprintw(win_map,coordinate_y,coordinate_x,"(NO PLUGINS)");
+	    }
+	  else 
+	    {
+	      coordinate_y = print_one_plugin(information[0],coordinate_x,coordinate_y,width);
+	      coordinate_y++;
+	      coordinate_y++;
+	      if(!information.size() >=2)
+		{
+		  coordinate_y = print_one_plugin(information[1],coordinate_x,coordinate_y,width);
+		  coordinate_y++;
+		  coordinate_y++;
+		  if(!information.size() >=3)
+		    {
+		      coordinate_y = print_one_plugin(information[2],coordinate_x,coordinate_y,width);
+		      coordinate_y++;
+		    }
+		}
+	    }
+	}
+      else
+	{
+	  if(!information.size())
+	    {
+	      mvwprintw(win_map,coordinate_y,coordinate_x,"(NO PLUGINS)");
+	    }
+      	  else if (information.size() >  selected_plugin)
+	    {
+	      coordinate_y = print_one_plugin(information[selected_plugin-2],coordinate_x,coordinate_y,width);
+	      coordinate_y++;
+	      coordinate_y++;
+	      if(!information.size() >=2)
+		{
+		  coordinate_y = print_one_plugin(information[selected_plugin-1],coordinate_x,coordinate_y,width);
+		  coordinate_y++;
+		  coordinate_y++;
+		  if(!information.size() >=3)
+		    {
+		      coordinate_y = print_one_plugin(information[selected_plugin],coordinate_x,coordinate_y,width);
+		      coordinate_y++;
+		    }
+		}
+	    }
+	}
+    }
+  	
+}
+/*!print one plugin in map window, it return new coordinate y*/
+int   gui::print_one_plugin(struct method_info method,int coordinate_x, int coordinate_y , int width)
+{
+  if(method.name.length() > (width - (coordinate_x+6)))
+    method.name.resize(width- (coordinate_x+6));
+  mvwprintw(win_map,coordinate_y,coordinate_x,"NAME: %s",method.name);
+	      
+  if(method.description.length() > (2*width - (coordinate_x+13)))
+    method.description.resize(2*width - (coordinate_x+13));
+  coordinate_y++;
+  if(method.description.length() > (width - (coordinate_x+13)))
+    coordinate_y++;	      
+  mvwprintw(win_map,coordinate_y,coordinate_x,"DESCRIPTION: %s",method.description);
+	      
+  if(method.status.length() > (2*width - (coordinate_x+8)))
+    method.status.resize(2*width - (coordinate_x+8));
+  coordinate_y++;
+  if(method.status.length() > (width - (coordinate_x+8)))
+    coordinate_y++;	
+  mvwprintw(win_map,coordinate_y,coordinate_x,"STATUS: %s",method.status);
+
+  return coordinate_y;
 }
 
 void gui::print_message(std::string text)
