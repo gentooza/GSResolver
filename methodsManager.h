@@ -34,6 +34,7 @@ class method
   method(){my_so = NULL; is_loaded=0; priority = -1;};
   ~method(){if(my_so){free(my_so);}};
 
+  void set_name(std::string new_name){name = new_name;};
   void set_path(std::string path){full_path = path;};
   void set_status(std::string new_status){status = new_status;};
   

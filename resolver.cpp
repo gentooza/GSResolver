@@ -44,10 +44,10 @@ resolver::~resolver()
 std::vector<struct method_info> resolver::load_methods()
 {
   std::vector<struct method_info> information;
-  
+ 
   myPluginManager->loadPlugins();
   information = myPluginManager->ret_plugins_information();
-
+  
   return information;
 }
 

@@ -17,6 +17,7 @@ You should have received a copy of the GNU General Public License
 along with GSResolver.  If not, see <https://www.gnu.org/licenses/>.
 */
 
+#include <string>
 #include <iostream>
 #include <vector>
 #include <limits>

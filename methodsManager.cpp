@@ -54,7 +54,6 @@ void method::refresh_info()
     }
   else
     {
-      name = "N/A";
       description = "N/A";
     }
 }
@@ -122,6 +121,7 @@ void methodsManager::loadPlugins()
 	  my_methods[i] = new method();
 	  my_methods[i]->set_path(path);
 	  my_methods[i]->my_so =  dlopen(path.c_str(), RTLD_LAZY);
+	  my_methods[i]->set_name(*iter);
 
 	  std::string status = "Plugin correctly loaded";
 	  if (!my_methods[i]->my_so)
@@ -140,6 +140,8 @@ void methodsManager::loadPlugins()
 		  status += path;
 		  status += " CAUSE: Bad plugin format, not following standards";
 		}
+	      else
+		my_methods[i]->refresh_info();
 	    }
 	  my_methods[i]->set_status(status);
 	  i++;
@@ -211,6 +213,7 @@ std::vector<struct method_info> methodsManager::ret_plugins_information()
     {
       information.push_back({my_methods[i]->ret_name(),my_methods[i]->ret_description(), my_methods[i]->ret_is_loaded(), my_methods[i]->ret_status()});
     }
+
   return information;
 
 }

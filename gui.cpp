@@ -184,6 +184,7 @@ void gui::draw_map(cell **& cells_map)
 
 void gui::draw_plugins(std::vector<struct method_info> information)
 {
+
   win_map = newwin(22,COLS/2,1,(COLS/2));
   box(win_map, '|', '*');
   mvwprintw(win_map,1,2,"Your Plugins:");
@@ -191,9 +192,9 @@ void gui::draw_plugins(std::vector<struct method_info> information)
     {
       mvwprintw(win_map,3,3,"**more**");
     }
-  if(information.size() - selected_plugin > 0)
+  if(information.size() - selected_plugin > 0 && (selected_plugin != -1))
     {
-      mvwprintw(win_map,3,18,"**more**");
+      mvwprintw(win_map,20,3,"**more**");
     }
   print_plugins(information, 5,4,COLS/2-2); 
 }
@@ -384,10 +385,13 @@ void   gui::print_plugins(std::vector<struct method_info> information,int start_
 {
   int index = 0;
   int coordinate_x,coordinate_y;
-  
+  FILE * fp;
+
+  fp = fopen ("debug.txt", "a+");
+  fprintf(fp, "*******Printing plugins...\n");
   coordinate_x = start_x;
   coordinate_y = start_y;
-  if(selected_plugin < information.size())
+  if(selected_plugin < int(information.size()))
     {
       if(selected_plugin <=2)
 	{	  
@@ -397,17 +401,26 @@ void   gui::print_plugins(std::vector<struct method_info> information,int start_
 	    }
 	  else 
 	    {
+	      fprintf(fp, "printing plugin 1 \n");
+	      fclose(fp);
 	      coordinate_y = print_one_plugin(information[0],coordinate_x,coordinate_y,width);
+	      fp = fopen ("debug.txt", "a+");
 	      coordinate_y++;
 	      coordinate_y++;
-	      if(!information.size() >=2)
+	      if(information.size() >=2)
 		{
+		  fprintf(fp, "printing plugin 2 \n");
+		  fclose(fp);
 		  coordinate_y = print_one_plugin(information[1],coordinate_x,coordinate_y,width);
+		  fp = fopen ("debug.txt", "a+");
 		  coordinate_y++;
 		  coordinate_y++;
-		  if(!information.size() >=3)
+		  if(information.size() >=3)
 		    {
+		      fprintf(fp, "printing plugin 3 \n");
+		      fclose(fp);
 		      coordinate_y = print_one_plugin(information[2],coordinate_x,coordinate_y,width);
+		      fp = fopen ("debug.txt", "a+");
 		      coordinate_y++;
 		    }
 		}
@@ -424,12 +437,12 @@ void   gui::print_plugins(std::vector<struct method_info> information,int start_
 	      coordinate_y = print_one_plugin(information[selected_plugin-2],coordinate_x,coordinate_y,width);
 	      coordinate_y++;
 	      coordinate_y++;
-	      if(!information.size() >=2)
+	      if(information.size() >=2)
 		{
 		  coordinate_y = print_one_plugin(information[selected_plugin-1],coordinate_x,coordinate_y,width);
 		  coordinate_y++;
 		  coordinate_y++;
-		  if(!information.size() >=3)
+		  if(information.size() >=3)
 		    {
 		      coordinate_y = print_one_plugin(information[selected_plugin],coordinate_x,coordinate_y,width);
 		      coordinate_y++;
@@ -438,29 +451,42 @@ void   gui::print_plugins(std::vector<struct method_info> information,int start_
 	    }
 	}
     }
+  else
+    {
+      fprintf(fp, "*******we are not gonna print any plugin!! we have selected:%d and is not < to size:%d \n",selected_plugin, information.size());
+    }
+  fprintf(fp,"end\n");
+  fclose(fp);
+  return;
   	
 }
 /*!print one plugin in map window, it return new coordinate y*/
 int   gui::print_one_plugin(struct method_info method,int coordinate_x, int coordinate_y , int width)
 {
+   FILE * fp;
+
+   fp = fopen ("debug.txt", "a+");
+
   if(method.name.length() > (width - (coordinate_x+6)))
     method.name.resize(width- (coordinate_x+6));
-  mvwprintw(win_map,coordinate_y,coordinate_x,"NAME: %s",method.name);
+  mvwprintw(win_map,coordinate_y,coordinate_x,"NAME: %s",method.name.c_str());
 	      
   if(method.description.length() > (2*width - (coordinate_x+13)))
     method.description.resize(2*width - (coordinate_x+13));
   coordinate_y++;
   if(method.description.length() > (width - (coordinate_x+13)))
     coordinate_y++;	      
-  mvwprintw(win_map,coordinate_y,coordinate_x,"DESCRIPTION: %s",method.description);
+  mvwprintw(win_map,coordinate_y,coordinate_x,"DESCRIPTION: %s",method.description.c_str());
 	      
   if(method.status.length() > (2*width - (coordinate_x+8)))
     method.status.resize(2*width - (coordinate_x+8));
   coordinate_y++;
   if(method.status.length() > (width - (coordinate_x+8)))
     coordinate_y++;	
-  mvwprintw(win_map,coordinate_y,coordinate_x,"STATUS: %s",method.status);
-
+  mvwprintw(win_map,coordinate_y,coordinate_x,"STATUS: %s",method.status.c_str());
+  
+  fprintf(fp, "\n %s \n\n %s \n\n %s \n\n",method.name.c_str() , method.description.c_str(), method.status.c_str());
+  fclose(fp);
   return coordinate_y;
 }
 
