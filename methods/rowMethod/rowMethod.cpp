@@ -51,7 +51,7 @@ public:
 	    coordinates = cells[i]->retPos();	
 	    if(coordinates.at(1) == row) //row
 	      if(cells[i]->retDefined())
-		definedNums.push_back(cells[i]->retValue());
+		definedNums.push_back(cells[i]->ret_value());
 	  }
 	for(int i = 0; i < sudoku_size ; i++)
 	  {

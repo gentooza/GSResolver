@@ -21,7 +21,8 @@ along with GSResolver.  If not, see <https://www.gnu.org/licenses/>.
 #include <iostream>
 #include <vector>
 #include <limits>
-//#include <stdlib.h>
+#include <stdio.h>
+#include <stdlib.h>
 #include <termios.h>
 #include <ncurses.h>
 #include <time.h>

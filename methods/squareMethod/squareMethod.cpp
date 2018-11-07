@@ -100,7 +100,7 @@ public:
 	  if(coordinates.at(0) >= col_min && coordinates.at(0) <= col_max) //col
 	    if(coordinates.at(1) >= row_min && coordinates.at(1) <= row_max) //row
 	      if(cells[i]->retDefined())
-		definedNums.push_back(cells[i]->retValue());
+		definedNums.push_back(cells[i]->ret_value());
 	}
       for(int i = 0; i < sudoku_size ; i++)
 	{

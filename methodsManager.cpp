@@ -22,23 +22,22 @@ along with GSResolver.  If not, see <https://www.gnu.org/licenses/>.
 int method::load()
 {
   int ret = -1;  
-  if(my_so)
-    {
-      int is_loaded=1;
-      // load the symbols
-      create_pluginInstance = (create_t*) dlsym(my_so, "create");
-      const char* dlsym_error = dlerror();
-      if (dlsym_error) {
-	std::cerr << "ERR: Cannot load symbol create: " << dlsym_error << '\n';
-        is_loaded= 0;
-      }
-      destroy_pluginInstance = (destroy_t*) dlsym(my_so, "destroy");
-      dlsym_error = dlerror();
-      if (dlsym_error) {
-	std::cerr << "ERR: Cannot load symbol destroy: " << dlsym_error << '\n';
-        is_loaded= 0;
-      }    
-    }
+
+  is_loaded=1;
+  // load the symbols
+  create_pluginInstance = (create_t*) dlsym(my_so, "create");
+  const char* dlsym_error = dlerror();
+  if (dlsym_error) {
+    std::cerr << "ERR: Cannot load symbol create: " << dlsym_error << '\n';
+    is_loaded= 0;
+  }
+  destroy_pluginInstance = (destroy_t*) dlsym(my_so, "destroy");
+  dlsym_error = dlerror();
+  if (dlsym_error) {
+    std::cerr << "ERR: Cannot load symbol destroy: " << dlsym_error << '\n';
+    is_loaded= 0;
+  }    
+    
   if(is_loaded)
     ret = 0;
   return ret;
@@ -130,6 +129,7 @@ void methodsManager::loadPlugins()
 	      status += path;
 	      status += " CAUSE: ";
 	      status += dlerror();
+	      //std::cerr << status << "\n";
 	      my_methods[i]->set_status(status);
 	    }
 	  else
