@@ -22,10 +22,10 @@ along with GSResolver.  If not, see <https://www.gnu.org/licenses/>.
 #include <limits>
 #include <string>
 
-#include "../resolvMethod.h"
+#include "../base_method.h"
 
 
-class colMethod : public resolvMethod
+class colMethod : public base_method
 {
 public:
   virtual int analyze(cell**& myCells) 
@@ -62,11 +62,11 @@ public:
       }
     return 0;
   };
-  virtual std::string retMethodName()
+  virtual std::string ret_name()
   {
     return "Simple column analisys method";
   };
-  virtual std::string retMethodDescription()
+  virtual std::string ret_description()
   {
     return "We remove as possible the values already defined in other fields in same column";
   }; 
@@ -75,10 +75,10 @@ public:
 
 // the class factories
 
-extern "C" resolvMethod* create() {
+extern "C" base_method* create() {
     return new colMethod;
 }
 
-extern "C" void destroy(resolvMethod* p) {
+extern "C" void destroy(base_method* p) {
     delete p;
 }

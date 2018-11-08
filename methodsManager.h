@@ -26,7 +26,7 @@ along with GSResolver.  If not, see <https://www.gnu.org/licenses/>.
 #include <iterator>
 #include <string.h>
 
-#include"./methods/resolvMethod.h"
+#include"./methods/base_method.h"
 
 class method
 {
@@ -54,8 +54,8 @@ class method
   std::string status;
   int is_loaded;
   int priority;
-  create_t* create_pluginInstance;
-  destroy_t* destroy_pluginInstance;
+  create_t* create_plugin_instance;
+  destroy_t* destroy_plugin_instance;
 };
 
 
@@ -69,8 +69,8 @@ class methodsManager
   void load_plugins();
   void free_plugins();
   int useMethod(cell **& myCells, int & sollution, std::string & status);
-  resolvMethod* createMethod();
-  void destroyMethod(resolvMethod*);
+  base_method* createMethod();
+  void destroyMethod(base_method*);
 
   std::vector<struct method_info> ret_plugins_information();
 

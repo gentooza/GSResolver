@@ -34,13 +34,13 @@ int method::load()
 
   is_loaded=1;
   // load the symbols
-  create_pluginInstance = (create_t*) dlsym(my_so, "create");
+  create_plugin_instance = (create_t*) dlsym(my_so, "create");
   const char* dlsym_error = dlerror();
   if (dlsym_error) {
     std::cerr << "ERR: Cannot load symbol create: " << dlsym_error << '\n';
     is_loaded= 0;
   }
-  destroy_pluginInstance = (destroy_t*) dlsym(my_so, "destroy");
+  destroy_plugin_instance = (destroy_t*) dlsym(my_so, "destroy");
   dlsym_error = dlerror();
   if (dlsym_error) {
     std::cerr << "ERR: Cannot load symbol destroy: " << dlsym_error << '\n';
@@ -56,11 +56,10 @@ void method::refresh_info()
 {
   if(is_loaded)
     {
-      resolvMethod* myMethod = create_pluginInstance();
-      //name = myMethod->retMethodName();
-      //description = myMethod->retMethodDescription();
-      destroy_pluginInstance(myMethod);
-      printf("nothing");
+      base_method* myMethod = create_plugin_instance();
+      //name = myMethod->ret_name();
+      //description = myMethod->ret_description();
+      destroy_plugin_instance(myMethod);
     }
   else
     {
@@ -112,16 +111,16 @@ void methodsManager::free_plugins()
 
 void methodsManager::load_plugins()
 {
-  std::vector <std::string> pluginList;
+  std::vector <std::string> plugins_list;
   std::vector <std::string>::iterator iter; 
 
   num_methods = 0;
-  search_plugins_folders(pluginList);
-  if(pluginList.size())
+  search_plugins_folders(plugins_list);
+  if(plugins_list.size())
     {
-      my_methods = new method*[pluginList.size()];
+      my_methods = new method*[plugins_list.size()];
       int i=0;
-      for(iter = pluginList.begin(); iter != pluginList.end(); ++iter)
+      for(iter = plugins_list.begin(); iter != plugins_list.end(); ++iter)
 	{
 	  std::string path = "./methods/";
 	  path += *iter;
@@ -165,7 +164,8 @@ void methodsManager::load_plugins()
 int methodsManager::useMethod(cell **& myCells, int & sollution, std::string & status)
 {
   int isIt = 0;
-  resolvMethod* myMethod = NULL;
+  /*resolvMethod* myMethod = NULL;
+  
   if(viActualMethod != vMethodsInSystem.end())
     {
       isIt=1;
@@ -213,7 +213,7 @@ int methodsManager::useMethod(cell **& myCells, int & sollution, std::string & s
       viActualMethod = vMethodsInSystem.begin();
       isIt=0;
     }
-
+  */
   return isIt;
 
 }
@@ -230,12 +230,12 @@ std::vector<struct method_info> methodsManager::ret_plugins_information()
 
 }
 
-resolvMethod* methodsManager::createMethod()
+base_method* methodsManager::createMethod()
 {
   return create_pluginInstance();
 }
 
-void methodsManager::destroyMethod(resolvMethod* myPlugin)
+void methodsManager::destroyMethod(base_method* myPlugin)
 {
   if (myPlugin)
     destroy_pluginInstance(myPlugin);

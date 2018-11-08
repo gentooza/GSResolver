@@ -29,13 +29,13 @@ along with GSResolver.  If not, see <https://www.gnu.org/licenses/>.
 #define _RESOLV_METHOD_
 
 
-class resolvMethod
+class base_method
 {
  public:
- resolvMethod(){};
+ base_method(){};
   
   virtual int analyze(cell**&){return 0;};
-  int hasSollution(cell **& cells)
+  int has_sollution(cell **& cells)
   {
     int sollution = 0;
     for(int i = 0; i < sudoku_size ; i++)    
@@ -45,14 +45,14 @@ class resolvMethod
     return sollution;
   }
 
-  virtual std::string retMethodName(){return "N/A";};
-  virtual std::string retMethodDescription(){return "N/A";}; 
+  virtual std::string ret_name(){return "N/A";};
+  virtual std::string ret_description(){return "N/A";}; 
   
   
 };
 
 // the types of the class factories
-typedef resolvMethod* create_t();
-typedef void destroy_t(resolvMethod*);
+typedef base_method* create_t();
+typedef void destroy_t(base_method*);
 
 #endif
