@@ -24,7 +24,7 @@ method::~method()
 {
   if(my_so)
     {
-      free(my_so);
+      dlclose(my_so);
     }
 };
 
@@ -60,6 +60,7 @@ void method::refresh_info()
       //name = myMethod->retMethodName();
       //description = myMethod->retMethodDescription();
       destroy_pluginInstance(myMethod);
+      printf("nothing");
     }
   else
     {
