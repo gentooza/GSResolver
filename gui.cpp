@@ -200,15 +200,15 @@ void gui::draw_map(cell **& cells_map)
   mvwhline(win_map,14, ((COLS/2)-36)/2,'=',33);
   mvwhline(win_map,16, ((COLS/2)-36)/2,'-',33);
   mvwhline(win_map,18, ((COLS/2)-36)/2,'-',33);
-  mvwvline(win_map,3, 4,'|',17);
-  mvwvline(win_map,3, 8,'|',17);
-  mvwvline(win_map,3, 12,'I',17);
-  mvwvline(win_map,3, 16,'|',17);
-  mvwvline(win_map,3, 20,'|',17);
-  mvwvline(win_map,3, 24,'I',17);
-  mvwvline(win_map,3, 28,'|',17);
-  mvwvline(win_map,3, 32,'|',17);
-  print_values(cells_map,2, 3);
+  mvwvline(win_map,3, ((COLS/2)-31)/2,'|',17);
+  mvwvline(win_map,3, ((COLS/2)-23)/2,'|',17);
+  mvwvline(win_map,3, ((COLS/2)-15)/2,'I',17);
+  mvwvline(win_map,3, ((COLS/2)-7)/2,'|',17);
+  mvwvline(win_map,3, ((COLS/2)+1)/2,'|',17);
+  mvwvline(win_map,3, ((COLS/2)+9)/2,'I',17);
+  mvwvline(win_map,3, ((COLS/2)+17)/2,'|',17);
+  mvwvline(win_map,3, ((COLS/2)+25)/2,'|',17); //32
+  print_values(cells_map,((COLS/2)-35)/2, 3);
 }
 
 void gui::draw_plugins(std::vector<struct method_info> information)
@@ -286,56 +286,36 @@ int gui::eval_keyboard_input(cell ** cells_map,std::vector<struct method_info> i
 	  break;
 	case('0'):
 	  set_value(cells_map, 0);
-	  //draw_map(cells_map);
 	  break;
 	case('1'):
 	  set_value(cells_map, 1);
-	  //draw_info();
-	  //draw_map(cells_map);
 	  break;	  
 	case('2'):
 	  set_value(cells_map, 2);
-	  //draw_info();
-	  //draw_map(cells_map);
 	  break;
 	case('3'):
 	  set_value(cells_map, 3);
-	  //draw_info();
-	  //draw_map(cells_map);
 	  break;	  
 	case('4'):
 	  set_value(cells_map, 4);
-	  //draw_info();
-	  //draw_map(cells_map);
 	  break;
 	case('5'):
 	  set_value(cells_map, 5);
-	  //draw_info();
-	  //draw_map(cells_map);
 	  break;
 	case('6'):
 	  set_value(cells_map, 6);
-	  //draw_info();
-	  //draw_map(cells_map);
 	  break;
 	case('7'):
 	  set_value(cells_map, 7);
-	  //draw_info();
-	  //draw_map(cells_map);
 	  break;
 	case('8'):
 	  set_value(cells_map, 8);
-	  //draw_info();
-	  //draw_map(cells_map);
 	  break;
 	case('9'):
 	  set_value(cells_map, 9);
-	  //draw_info();
-	  //draw_map(cells_map);
 	  break;
 	default:
 	  print_message(option,MSG_UNKNOWN);
-	  //draw_info();
 	  break;
 	}
     }
@@ -347,12 +327,10 @@ int gui::eval_keyboard_input(cell ** cells_map,std::vector<struct method_info> i
 	{
 	case('Q'):
 	  print_message('Q',MSG_CANCEL);
-	  //draw_map(cells_map);
 	  set_gui_state(GUI_MAIN);
 	  break;
 	default:
 	  print_message(option,MSG_UNKNOWN);
-	  //draw_info();
 	  break;
 	}
     }	  
@@ -365,7 +343,6 @@ int gui::eval_keyboard_input(cell ** cells_map,std::vector<struct method_info> i
 	case('Q'):
 	  not_finished=0;
 	  print_message('Q',MSG_FINISH);
-	  //draw_info();
 	  break;
 	case('e'):
 	  print_message('e',MSG_EDITION);
@@ -376,11 +353,9 @@ int gui::eval_keyboard_input(cell ** cells_map,std::vector<struct method_info> i
 	  set_gui_state(GUI_PLUGIN_MANAGEMENT);
 	  selected_plugin=-1;
 	  action_to_do = GUI_PLUGIN_MANAGEMENT;
-	  //draw_plugins(information);
 	  break;
 	default:
 	  print_message(option,MSG_UNKNOWN);
-	  //draw_info();
 	  break;
 	}
     }
