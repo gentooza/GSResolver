@@ -19,6 +19,15 @@ along with GSResolver.  If not, see <https://www.gnu.org/licenses/>.
 
 #include"methodsManager.h"
 
+
+method::~method()
+{
+  if(my_so)
+    {
+      free(my_so);
+    }
+};
+
 int method::load()
 {
   int ret = -1;  
@@ -48,8 +57,9 @@ void method::refresh_info()
   if(is_loaded)
     {
       resolvMethod* myMethod = create_pluginInstance();
-      name = myMethod->retMethodName();
-      description = myMethod->retMethodDescription();
+      //name = myMethod->retMethodName();
+      //description = myMethod->retMethodDescription();
+      destroy_pluginInstance(myMethod);
     }
   else
     {
@@ -57,7 +67,7 @@ void method::refresh_info()
     }
 }
 
-void methodsManager::searchFolders(std::vector <std::string>  & folders)
+void methodsManager::search_plugins_folders(std::vector <std::string>  & folders)
 {
   folders.clear();
   const char* PATH = "./methods";
@@ -84,7 +94,7 @@ void methodsManager::searchFolders(std::vector <std::string>  & folders)
 
   return;
 }
-void methodsManager::freePlugins()
+void methodsManager::free_plugins()
 {
   if(num_methods)
     {
@@ -92,20 +102,20 @@ void methodsManager::freePlugins()
 	{
 	  delete my_methods[i];
 	}
-      free(my_methods);      
+      delete my_methods;      
     }
   
   return;
 }
 
-void methodsManager::loadPlugins()
+
+void methodsManager::load_plugins()
 {
   std::vector <std::string> pluginList;
   std::vector <std::string>::iterator iter; 
 
-  freePlugins();
   num_methods = 0;
-  searchFolders(pluginList);
+  search_plugins_folders(pluginList);
   if(pluginList.size())
     {
       my_methods = new method*[pluginList.size()];
@@ -123,16 +133,17 @@ void methodsManager::loadPlugins()
 	  my_methods[i]->set_name(*iter);
 
 	  std::string status = "Plugin correctly loaded";
+	  //loading symbols
 	  if (!my_methods[i]->my_so)
 	    {
-	      status = "ERR: Cannot load library: ";
+	      status = "ERR: Cannot open library: ";
 	      status += path;
 	      status += " CAUSE: ";
 	      status += dlerror();
 	      //std::cerr << status << "\n";
 	      my_methods[i]->set_status(status);
 	    }
-	  else
+	  else	  //loading symbols
 	    {
 	      if(my_methods[i]->load())
 		{

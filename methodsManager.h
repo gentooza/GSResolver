@@ -32,7 +32,7 @@ class method
 {
  public:
   method(){my_so = NULL; is_loaded=0; priority = -1;};
-  ~method(){if(my_so){free(my_so);}};
+  ~method();
 
   void set_name(std::string new_name){name = new_name;};
   void set_path(std::string path){full_path = path;};
@@ -66,7 +66,8 @@ class methodsManager
   methodsManager(){num_methods = 0;};
   ~methodsManager(){};
 
-  void loadPlugins();
+  void load_plugins();
+  void free_plugins();
   int useMethod(cell **& myCells, int & sollution, std::string & status);
   resolvMethod* createMethod();
   void destroyMethod(resolvMethod*);
@@ -74,8 +75,8 @@ class methodsManager
   std::vector<struct method_info> ret_plugins_information();
 
  protected:
-  void searchFolders(std::vector <std::string> &);
-  void freePlugins();
+  void search_plugins_folders(std::vector <std::string> &);
+
  private:
   method** my_methods;
   int num_methods;

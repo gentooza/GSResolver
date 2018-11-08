@@ -44,8 +44,9 @@ resolver::~resolver()
 std::vector<struct method_info> resolver::load_methods()
 {
   std::vector<struct method_info> information;
- 
-  myPluginManager->loadPlugins();
+
+  myPluginManager->free_plugins();
+  myPluginManager->load_plugins();
   information = myPluginManager->ret_plugins_information();
   
   return information;
