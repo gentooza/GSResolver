@@ -96,6 +96,7 @@ void gui::initGui(cell **& cells_map)
 
 void gui::show_gui(cell **& my_cells,std::vector<struct method_info> information)
 {
+  draw_windows(gui_status,my_cells,information);
   draw_cursor(gui_status,my_cells);
   wrefresh(win_title);
   wrefresh(win_options);
@@ -114,6 +115,34 @@ void gui::show_gui(cell **& my_cells,std::vector<struct method_info> information
       wrefresh(win_info);
       break;
       };
+  return;
+}
+void gui::draw_windows(int status, cell **& my_cells, std::vector<struct method_info> information)
+{
+  int is_resized = win_resized();
+  if(is_resized)
+    {
+      draw_title();
+    }
+  switch(gui_status)
+    {
+    case(GUI_EDITION):
+      draw_options(status);
+      draw_info();
+      draw_map(my_cells);
+      break;
+    case(GUI_PLUGIN_MANAGEMENT):
+      draw_options(status);
+      draw_info();
+      draw_plugins(information);
+      break;
+    default: //main window
+      draw_options(status);
+      draw_map(my_cells);
+      draw_info();
+      break;
+    };
+  
   return;
 }
 
@@ -257,56 +286,56 @@ int gui::eval_keyboard_input(cell ** cells_map,std::vector<struct method_info> i
 	  break;
 	case('0'):
 	  set_value(cells_map, 0);
-	  draw_map(cells_map);
+	  //draw_map(cells_map);
 	  break;
 	case('1'):
 	  set_value(cells_map, 1);
-	  draw_info();
-	  draw_map(cells_map);
+	  //draw_info();
+	  //draw_map(cells_map);
 	  break;	  
 	case('2'):
 	  set_value(cells_map, 2);
-	  draw_info();
-	  draw_map(cells_map);
+	  //draw_info();
+	  //draw_map(cells_map);
 	  break;
 	case('3'):
 	  set_value(cells_map, 3);
-	  draw_info();
-	  draw_map(cells_map);
+	  //draw_info();
+	  //draw_map(cells_map);
 	  break;	  
 	case('4'):
 	  set_value(cells_map, 4);
-	  draw_info();
-	  draw_map(cells_map);
+	  //draw_info();
+	  //draw_map(cells_map);
 	  break;
 	case('5'):
 	  set_value(cells_map, 5);
-	  draw_info();
-	  draw_map(cells_map);
+	  //draw_info();
+	  //draw_map(cells_map);
 	  break;
 	case('6'):
 	  set_value(cells_map, 6);
-	  draw_info();
-	  draw_map(cells_map);
+	  //draw_info();
+	  //draw_map(cells_map);
 	  break;
 	case('7'):
 	  set_value(cells_map, 7);
-	  draw_info();
-	  draw_map(cells_map);
+	  //draw_info();
+	  //draw_map(cells_map);
 	  break;
 	case('8'):
 	  set_value(cells_map, 8);
-	  draw_info();
-	  draw_map(cells_map);
+	  //draw_info();
+	  //draw_map(cells_map);
 	  break;
 	case('9'):
 	  set_value(cells_map, 9);
-	  draw_info();
-	  draw_map(cells_map);
+	  //draw_info();
+	  //draw_map(cells_map);
 	  break;
 	default:
 	  print_message(option,MSG_UNKNOWN);
-	  draw_info();
+	  //draw_info();
 	  break;
 	}
     }
@@ -318,12 +347,12 @@ int gui::eval_keyboard_input(cell ** cells_map,std::vector<struct method_info> i
 	{
 	case('Q'):
 	  print_message('Q',MSG_CANCEL);
-	  draw_map(cells_map);
+	  //draw_map(cells_map);
 	  set_gui_state(GUI_MAIN);
 	  break;
 	default:
 	  print_message(option,MSG_UNKNOWN);
-	  draw_info();
+	  //draw_info();
 	  break;
 	}
     }	  
@@ -336,7 +365,7 @@ int gui::eval_keyboard_input(cell ** cells_map,std::vector<struct method_info> i
 	case('Q'):
 	  not_finished=0;
 	  print_message('Q',MSG_FINISH);
-	  draw_info();
+	  //draw_info();
 	  break;
 	case('e'):
 	  print_message('e',MSG_EDITION);
@@ -347,11 +376,11 @@ int gui::eval_keyboard_input(cell ** cells_map,std::vector<struct method_info> i
 	  set_gui_state(GUI_PLUGIN_MANAGEMENT);
 	  selected_plugin=-1;
 	  action_to_do = GUI_PLUGIN_MANAGEMENT;
-	  draw_plugins(information);
+	  //draw_plugins(information);
 	  break;
 	default:
 	  print_message(option,MSG_UNKNOWN);
-	  draw_info();
+	  //draw_info();
 	  break;
 	}
     }
@@ -671,3 +700,15 @@ void gui::set_gui_state(int state)
   draw_info();
 }
 
+int gui::win_resized()
+{
+  int ret = 0;
+  if(last_COLS != COLS || last_LINES != LINES)
+    {
+      ret = 1;
+      last_COLS = COLS;
+      last_LINES = LINES;
+    }
+
+  return ret;
+}

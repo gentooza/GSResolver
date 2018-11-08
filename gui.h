@@ -104,14 +104,16 @@ class gui
   void show_gui(cell **& my_cells,std::vector<struct method_info> information);
   //
   void showDescription();
-
+  
+  //drawing functions
+  void draw_windows(int status, cell **& my_cells, std::vector<struct method_info> information);
   void draw_title();
   void draw_options(int state);
   void draw_map(cell **& cells_map);
   void draw_plugins(std::vector<struct method_info> information);
   void draw_info();
-
   void draw_cursor(int state,cell **& my_cells);
+  //////////////
 
   int eval_keyboard_input( cell ** map_cells,std::vector<struct method_info> information);
   
@@ -134,6 +136,7 @@ class gui
   //////////////////////////////////////////////
   //  changing states
   void set_gui_state(int state);
+  int win_resized();
   
  private:
   std::vector <std::string> vBadThings;
@@ -147,6 +150,9 @@ class gui
   WINDOW *win_info;
   WINDOW *win_options;
   WINDOW *win_map;
+
+  int last_COLS;
+  int last_LINES;   
 };
 
 #endif
