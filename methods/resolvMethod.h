@@ -32,10 +32,8 @@ along with GSResolver.  If not, see <https://www.gnu.org/licenses/>.
 class resolvMethod
 {
  public:
- resolvMethod()
-   : iStatus(0) {};
-  virtual ~resolvMethod(){};
-
+ resolvMethod(){};
+  
   virtual int analyze(cell**&){return 0;};
   int hasSollution(cell **& cells)
   {
@@ -46,18 +44,11 @@ class resolvMethod
 
     return sollution;
   }
-  int retStatus(){return iStatus;};
-  int setMethodName(std::string newName){sName = newName;};
-  int setMethodDescription(std::string newDescription){sDescription = newDescription;};
 
-  std::string retMethodName(){return sName;};
-  std::string retMethodDescription(){return sDescription;}; 
+  virtual std::string retMethodName(){return "N/A";};
+  virtual std::string retMethodDescription(){return "N/A";}; 
   
   
- protected:
-  int iStatus;
-  std::string sName;
-  std::string sDescription;  
 };
 
 // the types of the class factories

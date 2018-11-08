@@ -30,9 +30,6 @@ class colMethod : public resolvMethod
 public:
   virtual int analyze(cell**& myCells) 
   {
-
-    setMethodName("Simple column analisys method");
-    setMethodDescription("We remove as possible the values already defined in other fields in same column");
   
     //square 1
     //cols 0,1,2
@@ -65,6 +62,14 @@ public:
       }
     return 0;
   };
+  virtual std::string retMethodName()
+  {
+    return "Simple column analisys method";
+  };
+  virtual std::string retMethodDescription()
+  {
+    return "We remove as possible the values already defined in other fields in same column";
+  }; 
 
 };
 
