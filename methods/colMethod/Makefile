@@ -16,7 +16,7 @@
 #along with GSResolver.  If not, see <https://www.gnu.org/licenses/>.
 
 CXXFLAGS=-std=c++11
-colMethod.so:colMethod.cpp ../../cell.cpp ../../cell.h ../resolvMethod.h
+colMethod.so:colMethod.cpp ../../cell.cpp ../../cell.h ../base_method.h
 	$(CXX) $(CXXFLAGS) -shared -fPIC -o colMethod.so colMethod.cpp ../../cell.cpp
 
 clean:

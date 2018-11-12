@@ -103,8 +103,7 @@ class gui
   void print_message(std::string text);
   void print_message(char option, int msg_type);
   void print_values(cell **& cells_map,int start_x, int start_y);
-  void print_plugins(std::vector<struct method_info> information,int start_x, int start_y , int width);
-  int  print_one_plugin(struct method_info method,int coordinate_x, int coordinate_y , int width);
+  int  print_one_plugin(struct method_info method,int coordinate_x, int coordinate_y ,int height, int width);
 
   //ACTIONS ON CELLS
   int  move_left(cell **&cells_map);
