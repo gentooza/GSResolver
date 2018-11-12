@@ -39,9 +39,9 @@ class cell
 
   int set_value(int value);
   int ret_value(){return iValue;};
-  int setDefined(int newDefined){defined = newDefined;};
+  void setDefined(int newDefined){defined = newDefined;};
   int retDefined(){return defined;};
-  int setCouldBe(std::vector <int> newCouldBe){couldBe = newCouldBe;};
+  void setCouldBe(std::vector <int> newCouldBe){couldBe = newCouldBe;};
   std::vector <int> retCouldBe(){return couldBe;};
   int hasSollution();
   int solve();
@@ -49,11 +49,11 @@ class cell
   int removeFrmCouldBe(std::vector <int> vectorToRemove);
   std::string retPrettyStatus();
 
-  int set_position(int col, int row);
+  void set_position(int col, int row);
   int ret_col(){return iCol;};
   int ret_row(){return iRow;};
   
-  int set_coordinates(int x, int y){GUI_coordinate_x=x; GUI_coordinate_y=y;};
+  void set_coordinates(int x, int y){GUI_coordinate_x=x; GUI_coordinate_y=y;};
   int ret_y(){return GUI_coordinate_y;};
   int ret_x(){return GUI_coordinate_x;};
   

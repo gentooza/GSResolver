@@ -72,7 +72,7 @@ int cell::set_value(int value)
     }
   return failed;
 }
-int cell::set_position(int col, int row)
+void cell::set_position(int col, int row)
 {
   //TODO constants here
   if((row > 0 && row <= 9) && (col > 0 && col <= 9))

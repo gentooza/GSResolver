@@ -28,7 +28,7 @@ along with GSResolver.  If not, see <https://www.gnu.org/licenses/>.
 class colMethod : public base_method
 {
 public:
-  virtual int analyze(cell**& myCells) 
+  int analyze(cell**& myCells) 
   {
   
     //square 1
@@ -62,11 +62,11 @@ public:
       }
     return 0;
   };
-  virtual std::string ret_name()
+  std::string ret_name()
   {
     return "Simple column analisys method";
   };
-  virtual std::string ret_description()
+  std::string ret_description()
   {
     return "We remove as possible the values already defined in other fields in same column";
   }; 

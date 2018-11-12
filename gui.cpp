@@ -351,7 +351,7 @@ int gui::eval_keyboard_input(cell ** cells_map,std::vector<struct method_info> i
 	case('p'):
 	  print_message('p',MSG_PLUGIN_MANAGEMENT);
 	  set_gui_state(GUI_PLUGIN_MANAGEMENT);
-	  selected_plugin=-1;
+	  selected_plugin=0;
 	  action_to_do = GUI_PLUGIN_MANAGEMENT;
 	  break;
 	default:
@@ -387,7 +387,6 @@ void   gui::print_values(cell **& cells_map,int start_x, int start_y)
 /*!print plugins in map window*/
 void   gui::print_plugins(std::vector<struct method_info> information,int start_x, int start_y , int width)
 {
-  int index = 0;
   int coordinate_x,coordinate_y;
   FILE * fp;
 
@@ -489,7 +488,7 @@ int   gui::print_one_plugin(struct method_info method,int coordinate_x, int coor
     coordinate_y++;	
   mvwprintw(win_map,coordinate_y,coordinate_x,"STATUS: %s",method.status.c_str());
   
-  fprintf(fp, "\n %s \n\n %s \n\n %s \n\n",method.name.c_str() , method.description.c_str(), method.status.c_str());
+  fprintf(fp, "\n %s \n\n %s \n\n %s \n\n %s \n\n",method.name.c_str() , method.description.c_str(), method.status.c_str(), method.err.c_str());
   fclose(fp);
   return coordinate_y;
 }
@@ -623,7 +622,6 @@ int gui::set_value(cell **&cells_map, int value)
 {
   int ret = -1;
   std::string message;
-  int by_two=0;
   if(value >=0 && value <=9)
     {
       if(value == 0)

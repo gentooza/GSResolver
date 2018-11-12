@@ -34,17 +34,18 @@ class method
   method(){my_so = NULL; is_loaded=0; priority = -1;};
   ~method();
 
-  void set_name(std::string new_name){name = new_name;};
   void set_path(std::string path){full_path = path;};
   void set_status(std::string new_status){status = new_status;};
+  void set_error(std::string new_error){error = new_error;};
   
   void *my_so;
   int load();
-  void refresh_info();
+  void refresh_info(std::string default_name, std::string default_description);
 
   std::string ret_name(){return name;};
   std::string ret_description(){return description;};
   std::string ret_status(){return status;};
+  std::string ret_error(){return error;};
   int ret_is_loaded(){return is_loaded;};
     
  private:
@@ -52,6 +53,7 @@ class method
   std::string description;
   std::string full_path;
   std::string status;
+  std::string error;
   int is_loaded;
   int priority;
   create_t* create_plugin_instance;

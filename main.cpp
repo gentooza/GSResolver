@@ -34,7 +34,6 @@ int main()
   std::vector< std::vector<std::string> > newValues;
   std::vector< std::vector<int> > values;
   std::vector <std::string> status;
-  int programOption;
   int action_to_do;
   resolver* our_resolver = new resolver();
   gui* our_gui = new gui(sVersion);

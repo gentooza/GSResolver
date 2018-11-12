@@ -52,18 +52,19 @@ int method::load()
   return ret;
 }
 
-void method::refresh_info()
+void method::refresh_info(std::string default_name, std::string default_description )
 {
   if(is_loaded)
     {
       base_method* myMethod = create_plugin_instance();
-      //name = myMethod->ret_name();
-      //description = myMethod->ret_description();
+      name = myMethod->ret_name();
+      description = myMethod->ret_description();
       destroy_plugin_instance(myMethod);
     }
   else
     {
-      description = "N/A";
+      name = default_name;
+      description = default_description;
     }
 }
 
@@ -130,30 +131,31 @@ void methodsManager::load_plugins()
 	  my_methods[i] = new method();
 	  my_methods[i]->set_path(path);
 	  my_methods[i]->my_so =  dlopen(path.c_str(), RTLD_LAZY);
-	  my_methods[i]->set_name(*iter);
-
-	  std::string status = "Plugin correctly loaded";
+	  std::string status = "Plugin correctly loaded";	  
 	  //loading symbols
-	  if (!my_methods[i]->my_so)
+	  if (!my_methods[i]->my_so) //ERROR
 	    {
+	      std::string error = dlerror();
 	      status = "ERR: Cannot open library: ";
 	      status += path;
 	      status += " CAUSE: ";
-	      status += dlerror();
+	      status += error;
 	      //std::cerr << status << "\n";
 	      my_methods[i]->set_status(status);
+	      my_methods[i]->set_error(error);
 	    }
-	  else	  //loading symbols
+	  else	  //loading symbols if NO ERROR
 	    {
+	      my_methods[i]->set_error("NO");
 	      if(my_methods[i]->load())
 		{
 		  status = "ERR: Cannot Load library: ";
 		  status += path;
 		  status += " CAUSE: Bad plugin format, not following standards";
-		}
-	      else
-		my_methods[i]->refresh_info();
+		  my_methods[i]->set_error("Bad plugin format, not following standards");
+		}	      
 	    }
+	  my_methods[i]->refresh_info(*iter,"N/A default");
 	  my_methods[i]->set_status(status);
 	  i++;
 	}
@@ -223,7 +225,7 @@ std::vector<struct method_info> methodsManager::ret_plugins_information()
   std::vector<struct method_info> information;
   for(int i=0; i <num_methods; i++)
     {
-      information.push_back({my_methods[i]->ret_name(),my_methods[i]->ret_description(), my_methods[i]->ret_is_loaded(), my_methods[i]->ret_status()});
+      information.push_back({my_methods[i]->ret_name(),my_methods[i]->ret_description(), my_methods[i]->ret_is_loaded(), my_methods[i]->ret_status(), my_methods[i]->ret_error()});
     }
 
   return information;

@@ -65,25 +65,6 @@ enum message_types
     MSG_PLUGIN_MANAGEMENT
   };
 
-static struct termios oldt;
-
-static void restore_terminal_settings(void)
-{
-    tcsetattr(0, TCSANOW, &oldt);  /* Apply saved settings */
-}
-
-static void disable_waiting_for_enter(void)
-{
-    struct termios newt;
-
-    /* Make terminal read 1 char at a time */
-    tcgetattr(0, &oldt);  /* Save terminal settings */
-    newt = oldt;  /* Init new settings */
-    newt.c_lflag &= ~(ICANON | ECHO);  /* Change settings */
-    tcsetattr(0, TCSANOW, &newt);  /* Apply settings */
-    atexit(restore_terminal_settings); /* Make sure settings will be restored when program ends  */
-}
-
 int getInt();
 
 
@@ -145,7 +126,7 @@ class gui
   int gui_status;
   int not_finished;
   int selected_cell;
-  int selected_plugin;
+  unsigned int selected_plugin;
   WINDOW *win_title;
   WINDOW *win_info;
   WINDOW *win_options;

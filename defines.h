@@ -33,6 +33,7 @@ struct method_info
   std::string description;
   int loaded;
   std::string status;
+  std::string err;
 };
 
 #endif

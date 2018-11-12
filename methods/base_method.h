@@ -32,9 +32,11 @@ along with GSResolver.  If not, see <https://www.gnu.org/licenses/>.
 class base_method
 {
  public:
- base_method(){};
+  base_method() {return;};
+  virtual ~base_method(){return;};
   
-  virtual int analyze(cell**&){return 0;};
+  virtual int analyze(cell**&) = 0;
+  
   int has_sollution(cell **& cells)
   {
     int sollution = 0;
@@ -45,8 +47,8 @@ class base_method
     return sollution;
   }
 
-  virtual std::string ret_name(){return "N/A";};
-  virtual std::string ret_description(){return "N/A";}; 
+  virtual std::string ret_name() = 0;
+  virtual std::string ret_description() = 0; 
   
   
 };
