@@ -179,3 +179,21 @@ int tools_value_possible(cell **& cells_map,int selected_cell,int value)
     }
   return ret;
 }
+
+
+std::vector<std::string> ret_paragraph_with_lines_return(std::string original,int line_width)
+{
+  std::vector<std::string> my_paragraph;
+  std::string tmp;
+  std::size_t new_pos;
+
+  tmp = original;
+  while(tmp.length() > line_width)
+    {
+      new_pos = tmp.substr(0,line_width).find_last_of(" ");
+      my_paragraph.push_back(tmp.substr(0,new_pos));
+      tmp = tmp.substr(new_pos+1);
+    }
+  my_paragraph.push_back(tmp);
+  return my_paragraph;
+}

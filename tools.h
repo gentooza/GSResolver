@@ -31,4 +31,8 @@ int tools_value_possible_in_row(cell **& cells_map,int selected_cell,int value);
 int tools_value_possible_in_section(cell **& cells_map,int selected_cell,int value);
 int tools_value_possible(cell **& cells_map,int selected_cell,int value);
 
+
+//TEXT TOOLS
+std::vector<std::string> ret_paragraph_with_lines_return(std::string original,int line_width);
+
 #endif

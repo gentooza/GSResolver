@@ -228,7 +228,7 @@ void gui::draw_plugins(std::vector<struct method_info> information)
   if(selected_plugin < (information.size()-1))
     mvwprintw(win_map,11,(COLS/2 -2),">");
   if(selected_plugin >=0 && selected_plugin < information.size())
-    print_one_plugin(information[selected_plugin],4,3,20,COLS/2-2);
+    print_one_plugin(information[selected_plugin],3,3,20,COLS/2-2);
 }
 
 void gui::draw_info()
@@ -407,52 +407,38 @@ int   gui::print_one_plugin(struct method_info method,int coordinate_x, int coor
 
   //NAME
   mvwprintw(win_map,coordinate_y,coordinate_x,"NAME:");
-  paragraph.clear();
-  tmp = method.name;
-  while(tmp.length() > (width - (coordinate_x+4)))
-    {
-      paragraph.push_back(tmp.substr(0,width - (coordinate_x+5)));
-      tmp = tmp.substr(	width - (coordinate_x+5));		  
-    }
   coordinate_y++;
+  paragraph.clear();
+  paragraph = ret_paragraph_with_lines_return(method.name,width);
+  
   for(paragraph_iter = paragraph.begin(); paragraph_iter != paragraph.end(); ++paragraph_iter)
     {
       mvwprintw(win_map,coordinate_y,coordinate_x,paragraph_iter->c_str());
       coordinate_y++;
     }
   mvwprintw(win_map,coordinate_y,coordinate_x,tmp.c_str());
-
   coordinate_y++;
   coordinate_y++;
+  
   //DESCRIPTION
   mvwprintw(win_map,coordinate_y,coordinate_x,"DESCRIPTION:");
-  paragraph.clear();
-  tmp = method.description;
-  while(tmp.length() > (width - (coordinate_x+4)))
-    {
-      paragraph.push_back(tmp.substr(0,width - (coordinate_x+5)));
-      tmp = tmp.substr(	width - (coordinate_x+5));		  
-    }
   coordinate_y++;
+  paragraph.clear();
+  paragraph = ret_paragraph_with_lines_return(method.description,width);
   for(paragraph_iter = paragraph.begin(); paragraph_iter != paragraph.end(); ++paragraph_iter)
     {
       mvwprintw(win_map,coordinate_y,coordinate_x,paragraph_iter->c_str());
       coordinate_y++;
     }
   mvwprintw(win_map,coordinate_y,coordinate_x,tmp.c_str());
-
   coordinate_y++;
   coordinate_y++;
+  
   //STATUS
   mvwprintw(win_map,coordinate_y,coordinate_x,"STATUS:");
-  paragraph.clear();
-  tmp = method.status;
-  while(tmp.length() > (width - (coordinate_x+4)))
-    {
-      paragraph.push_back(tmp.substr(0,width - (coordinate_x+5)));
-      tmp = tmp.substr(	width - (coordinate_x+5));		  
-    }
   coordinate_y++;
+  paragraph.clear();
+  paragraph = ret_paragraph_with_lines_return(method.description,width);
   for(paragraph_iter = paragraph.begin(); paragraph_iter != paragraph.end(); ++paragraph_iter)
     {
       mvwprintw(win_map,coordinate_y,coordinate_x,paragraph_iter->c_str());
