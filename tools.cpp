@@ -181,7 +181,7 @@ int tools_value_possible(cell **& cells_map,int selected_cell,int value)
 }
 
 
-std::vector<std::string> ret_paragraph_with_lines_return(std::string original,int line_width)
+std::vector<std::string> ret_paragraph_with_lines_return(std::string original,unsigned int line_width)
 {
   std::vector<std::string> my_paragraph;
   std::string tmp;

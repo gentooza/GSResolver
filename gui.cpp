@@ -438,7 +438,7 @@ int   gui::print_one_plugin(struct method_info method,int coordinate_x, int coor
   mvwprintw(win_map,coordinate_y,coordinate_x,"STATUS:");
   coordinate_y++;
   paragraph.clear();
-  paragraph = ret_paragraph_with_lines_return(method.description,width);
+  paragraph = ret_paragraph_with_lines_return(method.status,width);
   for(paragraph_iter = paragraph.begin(); paragraph_iter != paragraph.end(); ++paragraph_iter)
     {
       mvwprintw(win_map,coordinate_y,coordinate_x,paragraph_iter->c_str());

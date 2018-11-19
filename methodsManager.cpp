@@ -155,7 +155,7 @@ void methodsManager::load_plugins()
 		  my_methods[i]->set_error("Bad plugin format, not following standards");
 		}	      
 	    }
-	  my_methods[i]->refresh_info(*iter,"N/A default");
+	  my_methods[i]->refresh_info(*iter,"**nothing**");
 	  my_methods[i]->set_status(status);
 	  i++;
 	}
