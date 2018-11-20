@@ -403,20 +403,18 @@ int   gui::print_one_plugin(struct method_info method,int coordinate_x, int coor
 {
   std::vector<std::string> paragraph;
   std::vector<std::string>::iterator paragraph_iter;
-  std::string tmp;
 
   //NAME
   mvwprintw(win_map,coordinate_y,coordinate_x,"NAME:");
   coordinate_y++;
   paragraph.clear();
-  paragraph = ret_paragraph_with_lines_return(method.name,width);
+  paragraph = ret_paragraph_with_lines_return(method.name,width,3);
   
   for(paragraph_iter = paragraph.begin(); paragraph_iter != paragraph.end(); ++paragraph_iter)
     {
       mvwprintw(win_map,coordinate_y,coordinate_x,paragraph_iter->c_str());
       coordinate_y++;
     }
-  mvwprintw(win_map,coordinate_y,coordinate_x,tmp.c_str());
   coordinate_y++;
   coordinate_y++;
   
@@ -424,30 +422,27 @@ int   gui::print_one_plugin(struct method_info method,int coordinate_x, int coor
   mvwprintw(win_map,coordinate_y,coordinate_x,"DESCRIPTION:");
   coordinate_y++;
   paragraph.clear();
-  paragraph = ret_paragraph_with_lines_return(method.description,width);
+  paragraph = ret_paragraph_with_lines_return(method.description,width,5);
   for(paragraph_iter = paragraph.begin(); paragraph_iter != paragraph.end(); ++paragraph_iter)
     {
       mvwprintw(win_map,coordinate_y,coordinate_x,paragraph_iter->c_str());
       coordinate_y++;
     }
-  mvwprintw(win_map,coordinate_y,coordinate_x,tmp.c_str());
   coordinate_y++;
   coordinate_y++;
   
   //STATUS
-  mvwprintw(win_map,coordinate_y,coordinate_x,"STATUS:");
-  coordinate_y++;
-  paragraph.clear();
-  paragraph = ret_paragraph_with_lines_return(method.status,width);
-  for(paragraph_iter = paragraph.begin(); paragraph_iter != paragraph.end(); ++paragraph_iter)
-    {
+   mvwprintw(win_map,coordinate_y,coordinate_x,"STATUS:");
+   coordinate_y++;
+   paragraph.clear();
+   paragraph = ret_paragraph_with_lines_return(method.status,width,5);
+   for(paragraph_iter = paragraph.begin(); paragraph_iter != paragraph.end(); ++paragraph_iter)
+     {
       mvwprintw(win_map,coordinate_y,coordinate_x,paragraph_iter->c_str());
       coordinate_y++;
     }
-  mvwprintw(win_map,coordinate_y,coordinate_x,tmp.c_str());
 
-  coordinate_y++;
-  coordinate_y++;
+
   return coordinate_y;
 }
 

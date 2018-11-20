@@ -33,6 +33,6 @@ int tools_value_possible(cell **& cells_map,int selected_cell,int value);
 
 
 //TEXT TOOLS
-std::vector<std::string> ret_paragraph_with_lines_return(std::string original,unsigned int line_width);
+std::vector<std::string> ret_paragraph_with_lines_return(std::string original,unsigned int line_width, int max_lines);
 
 #endif

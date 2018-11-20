@@ -181,18 +181,20 @@ int tools_value_possible(cell **& cells_map,int selected_cell,int value)
 }
 
 
-std::vector<std::string> ret_paragraph_with_lines_return(std::string original,unsigned int line_width)
+std::vector<std::string> ret_paragraph_with_lines_return(std::string original,unsigned int line_width, int max_lines)
 {
   std::vector<std::string> my_paragraph;
   std::string tmp;
   std::size_t new_pos;
+  int current_line=0;
 
   tmp = original;
-  while(tmp.length() > line_width)
+  while((tmp.length() > line_width) && (current_line < max_lines))
     {
       new_pos = tmp.substr(0,line_width).find_last_of(" ");
       my_paragraph.push_back(tmp.substr(0,new_pos));
       tmp = tmp.substr(new_pos+1);
+      current_line++;
     }
   my_paragraph.push_back(tmp);
   return my_paragraph;
