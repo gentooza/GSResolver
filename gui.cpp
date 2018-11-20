@@ -389,6 +389,7 @@ int gui::eval_keyboard_input(cell ** cells_map,std::vector<struct method_info> i
 	  break;
 	case('r'):
 	  set_gui_state(GUI_RESOLVING);
+	  break;
 	default:
 	  print_message(option,MSG_UNKNOWN);
 	  break;
