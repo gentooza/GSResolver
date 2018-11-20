@@ -53,7 +53,8 @@ enum gui_status
   {
     GUI_MAIN = 0,
     GUI_EDITION,
-    GUI_PLUGIN_MANAGEMENT
+    GUI_PLUGIN_MANAGEMENT,
+    GUI_RESOLVING
   };
 
 enum message_types

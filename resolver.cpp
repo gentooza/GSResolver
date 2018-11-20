@@ -96,7 +96,6 @@ std::vector< std::vector<std::string> > resolver::getCurrent()
   std::vector< std::vector<std::string> > currentValues;
   std::vector<std::string> currentRow;
   int i = 0;
-  int icurrent_row = 0;
   int icurrent_field = 0;
 
   while(i < sudoku_size)

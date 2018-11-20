@@ -102,11 +102,8 @@ void gui::show_gui(cell **& my_cells,std::vector<struct method_info> information
   wrefresh(win_options);
   switch(gui_status)
     {
-    case(GUI_EDITION):
-      wrefresh(win_info);
-      wrefresh(win_map);
-      break;
     case(GUI_PLUGIN_MANAGEMENT):
+    case(GUI_EDITION):
       wrefresh(win_info);
       wrefresh(win_map);
       break;
@@ -126,6 +123,7 @@ void gui::draw_windows(int status, cell **& my_cells, std::vector<struct method_
     }
   switch(gui_status)
     {
+    case(GUI_RESOLVING):
     case(GUI_EDITION):
       draw_options(status);
       draw_info();
@@ -164,6 +162,12 @@ void gui::draw_options(int state)
 
   switch(state)
     {
+    case(GUI_RESOLVING):
+      mvwprintw(win_options,3,5,"[r] resolve one round");
+      mvwprintw(win_options,4,5,"[R] resolve everything");
+      ////quit
+      mvwprintw(win_options,8,5,"[Q] Return");     
+      break;
     case(GUI_EDITION):
       mvwprintw(win_options,3,5,"[1-9] set this number to cell");
       mvwprintw(win_options,4,5,"[arrow keys] select cell");
@@ -171,16 +175,17 @@ void gui::draw_options(int state)
       mvwprintw(win_options,8,5,"[Q] Return");
       break;
     case(GUI_PLUGIN_MANAGEMENT):
-      mvwprintw(win_options,3,5,"[<- ->arrow keys] select method");
-      mvwprintw(win_options,4,5,"[1-100] change usage order position");
-      mvwprintw(win_options,5,5,"[l] reload method");
-      mvwprintw(win_options,6,5,"[u] unload method");     
+      mvwprintw(win_options,3,5,"[<- ->arrow keys] navigate methods");
+      //mvwprintw(win_options,4,5,"[1-100] change usage order position");
+      //mvwprintw(win_options,5,5,"[l] reload method");
+      //mvwprintw(win_options,6,5,"[u] unload method");     
       ////quit
       mvwprintw(win_options,8,5,"[Q] Return");
       break;
     default:
       mvwprintw(win_options,3,5,"[e] Edit your sudoku");
       mvwprintw(win_options,4,5,"[p] Manage resolve methods");
+      mvwprintw(win_options,5,5,"[r] ¡Resolve!");           
       ////quit
       mvwprintw(win_options,8,5,"[Q] Quit GSResolver");
       break;
@@ -274,7 +279,7 @@ int gui::eval_keyboard_input(cell ** cells_map,std::vector<struct method_info> i
       switch(option)
 	{
 	case('Q'):
-	  print_message('Q',MSG_CANCEL);
+	  //print_message('Q',MSG_CANCEL);
 	  set_gui_state(GUI_MAIN);
 	  break;
 	case(KEY_LEFT):
@@ -331,7 +336,7 @@ int gui::eval_keyboard_input(cell ** cells_map,std::vector<struct method_info> i
       switch(option)
 	{
 	case('Q'):
-	  print_message('Q',MSG_CANCEL);
+	  //print_message('Q',MSG_CANCEL);
 	  set_gui_state(GUI_MAIN);
 	  break;
 	case(KEY_LEFT):
@@ -346,7 +351,22 @@ int gui::eval_keyboard_input(cell ** cells_map,std::vector<struct method_info> i
 	  print_message(option,MSG_UNKNOWN);
 	  break;
 	}
-    }	  
+    }
+  //in GUI resolving screen
+  else if (gui_status == GUI_RESOLVING)
+    {
+      option = wgetch(win_info);
+      switch(option)
+	{
+	case('Q'):
+	  //print_message('Q',MSG_CANCEL);
+	  set_gui_state(GUI_MAIN);
+	  break;
+	default:
+	  print_message(option,MSG_UNKNOWN);
+	  break;
+	}
+    }
   /*at main screen*/
   else
     {
@@ -355,18 +375,20 @@ int gui::eval_keyboard_input(cell ** cells_map,std::vector<struct method_info> i
 	{
 	case('Q'):
 	  not_finished=0;
-	  print_message('Q',MSG_FINISH);
+	  //print_message('Q',MSG_FINISH);
 	  break;
 	case('e'):
-	  print_message('e',MSG_EDITION);
+	  //print_message('e',MSG_EDITION);
 	  set_gui_state(GUI_EDITION);
 	  break;
 	case('p'):
-	  print_message('p',MSG_PLUGIN_MANAGEMENT);
+	  //print_message('p',MSG_PLUGIN_MANAGEMENT);
 	  set_gui_state(GUI_PLUGIN_MANAGEMENT);
 	  selected_plugin=0;
 	  action_to_do = GUI_PLUGIN_MANAGEMENT;
 	  break;
+	case('r'):
+	  set_gui_state(GUI_RESOLVING);
 	default:
 	  print_message(option,MSG_UNKNOWN);
 	  break;
