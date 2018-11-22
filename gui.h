@@ -48,6 +48,11 @@ enum options
   OPT_EDITION = 'e',
   OPT_PLUGIN_MANAGEMENT = 'p'
 };
+enum actions
+  {
+    ACT_ASK_FOR_PLUGINS = 1000,
+    ACT_RESOLVE_ROUND
+  };
 
 enum gui_status
   {
@@ -91,7 +96,7 @@ class gui
   void draw_windows(int status, cell **& my_cells, std::vector<struct method_info> information);
   void draw_title();
   void draw_options(int state);
-  void draw_map(cell **& cells_map);
+  void draw_map(cell **& cells_map,int status);
   void draw_plugins(std::vector<struct method_info> information);
   void draw_info();
   void draw_cursor(int state,cell **& my_cells);
@@ -126,6 +131,7 @@ class gui
   int gui_status;
   int not_finished;
   int selected_cell;
+  unsigned int iround;
   unsigned int selected_plugin;
   WINDOW *win_title;
   WINDOW *win_info;

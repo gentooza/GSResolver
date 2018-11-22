@@ -87,7 +87,7 @@ void gui::initGui(cell **& cells_map)
   //OPTIONS
   draw_options(gui_status);  
   //GAME MAP
-  draw_map(cells_map);
+  draw_map(cells_map,gui_status);
   //information feedback
   draw_info();
   draw_cursor(gui_status,cells_map);
@@ -127,7 +127,7 @@ void gui::draw_windows(int status, cell **& my_cells, std::vector<struct method_
     case(GUI_EDITION):
       draw_options(status);
       draw_info();
-      draw_map(my_cells);
+      draw_map(my_cells,gui_status);
       break;
     case(GUI_PLUGIN_MANAGEMENT):
       draw_options(status);
@@ -136,7 +136,7 @@ void gui::draw_windows(int status, cell **& my_cells, std::vector<struct method_
       break;
     default: //main window
       draw_options(status);
-      draw_map(my_cells);
+      draw_map(my_cells,gui_status);
       draw_info();
       break;
     };
@@ -166,7 +166,7 @@ void gui::draw_options(int state)
       mvwprintw(win_options,3,5,"[r] resolve one round");
       mvwprintw(win_options,4,5,"[R] resolve everything");
       ////quit
-      mvwprintw(win_options,8,5,"[Q] Return");     
+      mvwprintw(win_options,8,5,"[Q] Return and cancel");     
       break;
     case(GUI_EDITION):
       mvwprintw(win_options,3,5,"[1-9] set this number to cell");
@@ -192,11 +192,14 @@ void gui::draw_options(int state)
     }
 }
 
-void gui::draw_map(cell **& cells_map)
+void gui::draw_map(cell **& cells_map,int status)
 {
   win_map = newwin(22,COLS/2,1,(COLS/2));
   box(win_map, '|', '*');
-  mvwprintw(win_map,1,2,"Your Sudoku:");
+  std::string title = "Your Sudoku:";
+  if(status == GUI_RESOLVING)    
+    title += "      ROUND " + std::to_string(iround);
+  mvwprintw(win_map,1,2,title.c_str());
   mvwhline(win_map,4, ((COLS/2)-36)/2,'-',33);
   mvwhline(win_map,6, ((COLS/2)-36)/2,'-',33);
   mvwhline(win_map,8, ((COLS/2)-36)/2,'=',33);
@@ -362,6 +365,9 @@ int gui::eval_keyboard_input(cell ** cells_map,std::vector<struct method_info> i
 	  //print_message('Q',MSG_CANCEL);
 	  set_gui_state(GUI_MAIN);
 	  break;
+	case('r')://Resolve one round
+	  action_to_do = ACT_RESOLVE_ROUND;
+	  break;
 	default:
 	  print_message(option,MSG_UNKNOWN);
 	  break;
@@ -389,6 +395,7 @@ int gui::eval_keyboard_input(cell ** cells_map,std::vector<struct method_info> i
 	  break;
 	case('r'):
 	  set_gui_state(GUI_RESOLVING);
+	  iround=1;
 	  break;
 	default:
 	  print_message(option,MSG_UNKNOWN);
