@@ -30,33 +30,33 @@ along with GSResolver.  If not, see <https://www.gnu.org/licenses/>.
 
 int main()
 {
-  std::string sVersion = "0.1"; 
+  std::string sVersion = "0.1 ALPHA"; 
   std::vector< std::vector<std::string> > newValues;
   std::vector< std::vector<int> > values;
   std::vector <std::string> status;
   int action_to_do;
   resolver* our_resolver = new resolver();
   gui* our_gui = new gui(sVersion);
-  cell ** cells_map = new cell*[81];
-  for(int i=0;i<81;i++)
-    cells_map[i] = new cell(0);
+  
 
   std::vector<struct method_info> methods_information;
   
-  our_gui->initGui(cells_map);  
+  our_gui->initGui(our_resolver);  
   our_gui->showInfo();
-  our_gui->show_gui(cells_map,methods_information);
-
-  methods_information = our_resolver->load_methods();
+  our_gui->show_gui(our_resolver);
 
   while(our_gui->isNotFinished())
     {
-      action_to_do = our_gui->eval_keyboard_input(cells_map,methods_information);
+      action_to_do = our_gui->eval_keyboard_input(our_resolver);
       //If we are loading plugin management screen, load our plugin managment system information
-      if(action_to_do == GUI_PLUGIN_MANAGEMENT) 
+      if(action_to_do == ACT_ASK_FOR_PLUGINS) 
 	{
-	  methods_information.clear();
-	  methods_information = our_resolver->load_methods();
+	  our_resolver->load_methods();
+	}
+      if(action_to_do == ACT_RESOLVE_ROUND)
+	{
+	  //TODO
+	  //our_resolver->resolve_round();
 	}
       our_gui->show_gui(cells_map,methods_information);
 

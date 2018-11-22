@@ -65,23 +65,26 @@ class method
 class methodsManager
 {
  public:
-  methodsManager(){num_methods = 0;};
-  ~methodsManager(){};
+ methodsManager(){num_methods = 0;};
+  ~methodsanager(){};
 
   void load_plugins();
   void free_plugins();
-  int useMethod(cell **& myCells, int & sollution, std::string & status);
   base_method* createMethod();
   void destroyMethod(base_method*);
 
-  std::vector<struct method_info> ret_plugins_information();
+  int num_methods(){return inum_methods;};
+  
+  std::string method_name(int index);
+  std::string method_status(int index);
+  std::string method_description(int index);
 
  protected:
   void search_plugins_folders(std::vector <std::string> &);
 
  private:
-  method** my_methods;
-  int num_methods;
+  method** inst_methods;
+  int inum_methods;
   std::vector <void*> vMethodsInSystem;
   std::vector <void*>::iterator viActualMethod;
   create_t* create_pluginInstance;

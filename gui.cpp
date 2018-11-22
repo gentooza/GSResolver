@@ -79,28 +79,28 @@ void gui::showInfo()
   getch();
 }
 
-void gui::initGui(cell **& cells_map)
+void gui::initGui(resolver*& my_resolver)
 {
-  gui_status = GUI_MAIN;
+  gui_state = GUI_MAIN;
   //TITLE
   draw_title();
   //OPTIONS
-  draw_options(gui_status);  
+  draw_options(gui_state);  
   //GAME MAP
-  draw_map(cells_map,gui_status);
+  draw_map(gui_state,my_resolver);
   //information feedback
   draw_info();
-  draw_cursor(gui_status,cells_map);
+  draw_cursor(gui_state,my_resolver);
   return;
 }
 
-void gui::show_gui(cell **& my_cells,std::vector<struct method_info> information)
+void gui::show_gui(resolver*& my_resolver)
 {
-  draw_windows(gui_status,my_cells,information);
-  draw_cursor(gui_status,my_cells);
+  draw_windows(gui_state,my_resolver);
+  draw_cursor(gui_state,my_resolver);
   wrefresh(win_title);
   wrefresh(win_options);
-  switch(gui_status)
+  switch(gui_state)
     {
     case(GUI_PLUGIN_MANAGEMENT):
     case(GUI_EDITION):
@@ -114,29 +114,29 @@ void gui::show_gui(cell **& my_cells,std::vector<struct method_info> information
       };
   return;
 }
-void gui::draw_windows(int status, cell **& my_cells, std::vector<struct method_info> information)
+void gui::draw_windows(int state, resolver*& my_resolver)
 {
   int is_resized = win_resized();
   if(is_resized)
     {
       draw_title();
     }
-  switch(gui_status)
+  switch(gui_state)
     {
     case(GUI_RESOLVING):
     case(GUI_EDITION):
-      draw_options(status);
+      draw_options(state);
       draw_info();
-      draw_map(my_cells,gui_status);
+      draw_map(gui_state,my_resolver);
       break;
     case(GUI_PLUGIN_MANAGEMENT):
-      draw_options(status);
+      draw_options(state);
       draw_info();
-      draw_plugins(information);
+      draw_plugins(my_resolver);
       break;
     default: //main window
-      draw_options(status);
-      draw_map(my_cells,gui_status);
+      draw_options(state);
+      draw_map(gui_state,my_resolver);
       draw_info();
       break;
     };
@@ -192,12 +192,12 @@ void gui::draw_options(int state)
     }
 }
 
-void gui::draw_map(cell **& cells_map,int status)
+void gui::draw_map(int state, resolver*& my_resolver)
 {
   win_map = newwin(22,COLS/2,1,(COLS/2));
   box(win_map, '|', '*');
   std::string title = "Your Sudoku:";
-  if(status == GUI_RESOLVING)    
+  if(state == GUI_RESOLVING)    
     title += "      ROUND " + std::to_string(iround);
   mvwprintw(win_map,1,2,title.c_str());
   mvwhline(win_map,4, ((COLS/2)-36)/2,'-',33);
@@ -216,10 +216,10 @@ void gui::draw_map(cell **& cells_map,int status)
   mvwvline(win_map,3, ((COLS/2)+9)/2,'I',17);
   mvwvline(win_map,3, ((COLS/2)+17)/2,'|',17);
   mvwvline(win_map,3, ((COLS/2)+25)/2,'|',17); //32
-  print_values(cells_map,((COLS/2)-35)/2, 3);
+  print_values(my_resolver,((COLS/2)-35)/2, 3);
 }
 
-void gui::draw_plugins(std::vector<struct method_info> information)
+void gui::draw_plugins(resolver*& my_resolver)
 {
 
   win_map = newwin(22,COLS/2,1,(COLS/2));
@@ -233,10 +233,10 @@ void gui::draw_plugins(std::vector<struct method_info> information)
   if(selected_plugin)
     mvwprintw(win_map,11,1,"<");
 
-  if(selected_plugin < (information.size()-1))
+  if(selected_plugin < (my_resolver->num_plugins()-1))
     mvwprintw(win_map,11,(COLS/2 -2),">");
-  if(selected_plugin >=0 && selected_plugin < information.size())
-    print_one_plugin(information[selected_plugin],3,3,20,COLS/2-2);
+  if(selected_plugin >=0 && selected_plugin < my_resolver->num_plugins())
+    print_one_plugin(my_resolver,selected_plugin,3,3,20,COLS/2-2);
 }
 
 void gui::draw_info()
@@ -254,12 +254,13 @@ void gui::draw_info()
     }
 }
 
-void gui::draw_cursor(int state,cell **& my_cells)
+void gui::draw_cursor(int state,resolver*& my_resolver)
 {
   switch(state)
     {
     case(GUI_EDITION):
-      wmove(win_map, my_cells[selected_cell]->ret_y(),my_cells[selected_cell]->ret_x());
+      stcell_coordinates my_coordinates = my_resolver->cell_coordinates(selected_cell);
+      wmove(win_map, my_coordinates.y,my_coordinates.x);
       keypad(win_info,FALSE);
       keypad(win_map,TRUE);
       break;
@@ -271,12 +272,12 @@ void gui::draw_cursor(int state,cell **& my_cells)
     }
 }
 
-int gui::eval_keyboard_input(cell ** cells_map,std::vector<struct method_info> information)
+int gui::eval_keyboard_input(resolver*& my_resolver)
 {
-  int action_to_do = 0;
+  int action_to_do = ACT_NONE;
   int option;
   /*when editing the cells map*/
-  if(gui_status == GUI_EDITION)
+  if(gui_state == GUI_EDITION)
     {
       option = wgetch(win_map);
       switch(option)
@@ -286,46 +287,46 @@ int gui::eval_keyboard_input(cell ** cells_map,std::vector<struct method_info> i
 	  set_gui_state(GUI_MAIN);
 	  break;
 	case(KEY_LEFT):
-	  move_left(cells_map);	  
+	  move_left(my_resolver);	  
 	  break;
 	case(KEY_RIGHT):
-	  move_right(cells_map);	  
+	  move_right(my_resolver);	  
 	  break;
 	case(KEY_UP):
-	  move_up(cells_map);  
+	  move_up(my_resolver);  
 	  break;
 	case(KEY_DOWN):
-	  move_down(cells_map);	  
+	  move_down(my_resolver);	  
 	  break;
 	case('0'):
-	  set_value(cells_map, 0);
+	  set_value(my_resolver, 0);
 	  break;
 	case('1'):
-	  set_value(cells_map, 1);
+	  set_value(my_resolver, 1);
 	  break;	  
 	case('2'):
-	  set_value(cells_map, 2);
+	  set_value(my_resolver, 2);
 	  break;
 	case('3'):
-	  set_value(cells_map, 3);
+	  set_value(my_resolver, 3);
 	  break;	  
 	case('4'):
-	  set_value(cells_map, 4);
+	  set_value(my_resolver, 4);
 	  break;
 	case('5'):
-	  set_value(cells_map, 5);
+	  set_value(my_resolver, 5);
 	  break;
 	case('6'):
-	  set_value(cells_map, 6);
+	  set_value(my_resolver, 6);
 	  break;
 	case('7'):
-	  set_value(cells_map, 7);
+	  set_value(my_resolver, 7);
 	  break;
 	case('8'):
-	  set_value(cells_map, 8);
+	  set_value(my_resolver, 8);
 	  break;
 	case('9'):
-	  set_value(cells_map, 9);
+	  set_value(my_resolver, 9);
 	  break;
 	default:
 	  print_message(option,MSG_UNKNOWN);
@@ -333,7 +334,7 @@ int gui::eval_keyboard_input(cell ** cells_map,std::vector<struct method_info> i
 	}
     }
   //in plugin management screen
-  else if (gui_status == GUI_PLUGIN_MANAGEMENT)
+  else if (gui_state == GUI_PLUGIN_MANAGEMENT)
     {
       option = wgetch(win_info);
       switch(option)
@@ -347,7 +348,7 @@ int gui::eval_keyboard_input(cell ** cells_map,std::vector<struct method_info> i
 	    selected_plugin--;	  
 	  break;
 	case(KEY_RIGHT):
-	  if(selected_plugin< (information.size()-1))
+	  if(selected_plugin < (my_resolver->num_methods()-1))
 	    selected_plugin++;	  
 	  break;
 	default:
@@ -356,7 +357,7 @@ int gui::eval_keyboard_input(cell ** cells_map,std::vector<struct method_info> i
 	}
     }
   //in GUI resolving screen
-  else if (gui_status == GUI_RESOLVING)
+  else if (gui_state == GUI_RESOLVING)
     {
       option = wgetch(win_info);
       switch(option)
@@ -391,7 +392,7 @@ int gui::eval_keyboard_input(cell ** cells_map,std::vector<struct method_info> i
 	  //print_message('p',MSG_PLUGIN_MANAGEMENT);
 	  set_gui_state(GUI_PLUGIN_MANAGEMENT);
 	  selected_plugin=0;
-	  action_to_do = GUI_PLUGIN_MANAGEMENT;
+	  action_to_do = ACT_ASK_FOR_PLUGINS;
 	  break;
 	case('r'):
 	  set_gui_state(GUI_RESOLVING);
@@ -405,10 +406,11 @@ int gui::eval_keyboard_input(cell ** cells_map,std::vector<struct method_info> i
   return action_to_do;
 }
 
-void   gui::print_values(cell **& cells_map,int start_x, int start_y)
+void   gui::print_values(resolver*& my_resolver,int start_x, int start_y)
 {
   int index = 0;
   int coordinate_x,coordinate_y;
+  int value = 0;
   
   coordinate_x = start_x;
   coordinate_y = start_y;
@@ -416,10 +418,11 @@ void   gui::print_values(cell **& cells_map,int start_x, int start_y)
     {
       for(int column = 1; column <= 9; column++)
 	{
-	  cells_map[index]->set_coordinates(coordinate_x,coordinate_y);
-	  cells_map[index]->set_position(column,row);
-	  if(cells_map[index]->ret_value())
-	    mvwprintw(win_map,coordinate_y,coordinate_x,"%d",cells_map[index]->ret_value());
+	  my_resolver->set_cell_coordinates(coordinate_x,coordinate_y);
+	  my_resolver->set_cell_position(index,column,row);
+	  value =  my_resolver->cell_value(index);
+	  if(value)
+	    mvwprintw(win_map,coordinate_y,coordinate_x,"%d",value);
 	  coordinate_x+=4;
 	  index++;
 	}
@@ -429,7 +432,7 @@ void   gui::print_values(cell **& cells_map,int start_x, int start_y)
 }
 
 /*!print one plugin in map window, it return new coordinate y*/
-int   gui::print_one_plugin(struct method_info method,int coordinate_x, int coordinate_y ,int height, int width)
+int   gui::print_one_plugin(resolver*& my_resolver,int no_plugin,int coordinate_x, int coordinate_y ,int height, int width)
 {
   std::vector<std::string> paragraph;
   std::vector<std::string>::iterator paragraph_iter;
@@ -438,7 +441,7 @@ int   gui::print_one_plugin(struct method_info method,int coordinate_x, int coor
   mvwprintw(win_map,coordinate_y,coordinate_x,"NAME:");
   coordinate_y++;
   paragraph.clear();
-  paragraph = ret_paragraph_with_lines_return(method.name,width,3);
+  paragraph = ret_paragraph_with_lines_return(my_resolver->method_name(no_plugin),width,3);
   
   for(paragraph_iter = paragraph.begin(); paragraph_iter != paragraph.end(); ++paragraph_iter)
     {
@@ -452,7 +455,7 @@ int   gui::print_one_plugin(struct method_info method,int coordinate_x, int coor
   mvwprintw(win_map,coordinate_y,coordinate_x,"DESCRIPTION:");
   coordinate_y++;
   paragraph.clear();
-  paragraph = ret_paragraph_with_lines_return(method.description,width,5);
+  paragraph = ret_paragraph_with_lines_return(my_resolver->method_description(no_plugin),width,5);
   for(paragraph_iter = paragraph.begin(); paragraph_iter != paragraph.end(); ++paragraph_iter)
     {
       mvwprintw(win_map,coordinate_y,coordinate_x,paragraph_iter->c_str());
@@ -465,7 +468,7 @@ int   gui::print_one_plugin(struct method_info method,int coordinate_x, int coor
    mvwprintw(win_map,coordinate_y,coordinate_x,"STATUS:");
    coordinate_y++;
    paragraph.clear();
-   paragraph = ret_paragraph_with_lines_return(method.status,width,5);
+   paragraph = ret_paragraph_with_lines_return(my_resolver->method_status(no_plugin),width,5);
    for(paragraph_iter = paragraph.begin(); paragraph_iter != paragraph.end(); ++paragraph_iter)
      {
       mvwprintw(win_map,coordinate_y,coordinate_x,paragraph_iter->c_str());
@@ -528,16 +531,16 @@ void gui::print_message(char option, int msg_type)
 }
 
 //actions on cells functions
-int  gui::move_left(cell **&cells_map)
+int  gui::move_left(resolver*& my_resolver)
 {
   int ret = -1;
-  int my_col;
+  stcell_position our_cell_position {-1,-1};
   //if not the first one, or out of bounds
-  if(selected_cell > 0 && selected_cell < 81)
+  if(selected_cell > 0 && selected_cell < sudoku_size)
     {
-      my_col = cells_map[selected_cell]->ret_col();
+      our_cell_position = my_resolver->cell_position(selected_cell);
       //if not in the left edge
-      if(my_col > 1)
+      if(our_cell_position.col > 1)
 	{
 	  ret = selected_cell-1;
 	  selected_cell = ret;
@@ -546,16 +549,16 @@ int  gui::move_left(cell **&cells_map)
   return ret;
 }
 
-int  gui::move_right(cell **&cells_map)
+int  gui::move_right(resolver*& my_resolver)
 {
   int ret = -1;
-  int my_col;
+  stcell_position our_cell_position {-1,-1};
   //if not the last one, or out of bounds
-  if(selected_cell >= 0 && selected_cell < 80)
+  if(selected_cell >= 0 && selected_cell < (sudoku_size-1))
     {
-      my_col = cells_map[selected_cell]->ret_col();
+      our_cell_position = my_resolver->cell_position(selected_cell);
       //if not in the right edge
-      if(my_col < 9)
+      if(our_cell_position.col < 9)
 	{
 	  ret = selected_cell+1;
 	  selected_cell = ret;
@@ -564,16 +567,16 @@ int  gui::move_right(cell **&cells_map)
   return ret;
 }
 
-int  gui::move_up(cell **&cells_map)
+int  gui::move_up(resolver*& my_resolver)
 {
   int ret = -1;
-  int my_row;
+  stcell_position our_cell_position {-1,-1};
   //if not in the first row, or out of bounds
-  if(selected_cell > 8 && selected_cell < 81)
+  if(selected_cell > 8 && selected_cell < sudoku_size)
     {
-      my_row = cells_map[selected_cell]->ret_row();
+      our_cell_position = my_resolver->cell_position(selected_cell);
       //if not in the upper edge
-      if(my_row > 1)
+      if(our_cell_position.row > 1)
 	{
 	  ret = selected_cell-9;
 	  selected_cell = ret;
@@ -582,16 +585,16 @@ int  gui::move_up(cell **&cells_map)
   return ret;
 }
 
-int  gui::move_down(cell **&cells_map)
+int  gui::move_down(resolver*& my_resolver)
 {
   int ret = -1;
-  int my_row;
+  stcell_position our_cell_position {-1,-1};
   //if not in the first row, or out of bounds
-  if(selected_cell >= 0 && selected_cell <= 71)
+  if(selected_cell >= 0 && selected_cell <= (sudoku_size-10))
     {
-      my_row = cells_map[selected_cell]->ret_row();
+      our_cell_position = my_resolver->cell_position(selected_cell);      
       //if not in the bottom edge
-      if(my_row < 9)
+      if(our_cell_position.row < 9)
 	{
 	  ret = selected_cell+9;
 	  selected_cell = ret;
@@ -601,7 +604,7 @@ int  gui::move_down(cell **&cells_map)
 
 }
 
-int gui::set_value(cell **&cells_map, int value)
+int gui::set_value(resolver*& my_resolver, int value)
 {
   int ret = -1;
   std::string message;

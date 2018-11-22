@@ -22,114 +22,106 @@ along with GSResolver.  If not, see <https://www.gnu.org/licenses/>.
 
 resolver::resolver()
 {
-  myCells =  new cell* [sudoku_size];
+  inst_cells =  new cell* [sudoku_size];
+  inum_cells = sudoku_size;
   for (int i=0; i < sudoku_size; i++)
-    myCells[i] = new cell();
+    inst_cells[i] = new cell();
   vStatus.clear();
   iRound = 0;
   vStatus.push_back("Round 0, original and possible values only");
-  myPluginManager = new methodsManager();
+  inst_methods_manager = new methodsManager();
   return;
 }
 resolver::~resolver()
 {
   for(int i = sudoku_size-1 ; i >= 0 ; i--)
-    if(myCells[i])
-      delete myCells[i];
-  delete myCells;
-  delete myPluginManager;
+    if(inst_cells[i])
+      delete inst_cells[i];
+  delete inst_cells;
+  delete inst_methods_manager;
   return;
 }
 
-std::vector<struct method_info> resolver::load_methods()
+/*!methods related functions*/
+void resolver::load_methods()
 {
-  std::vector<struct method_info> information;
-
-  myPluginManager->free_plugins();
-  myPluginManager->load_plugins();
-  information = myPluginManager->ret_plugins_information();
-  
-  return information;
+  inst_methods_manager->free_plugins();
+  inst_methods_manager->load_plugins(); 
+  return;
 }
 
-int  resolver::setValues(std::vector< std::vector<int> > values) //TODO, its not needed anymore
+std::string resolver::method_name(int index)
 {
-  std::vector< std::vector<int> >::iterator rowIterator;
-  std::vector<int>::iterator cellIterator;
-  int i = 0;
-  int row = 0;
-  int col = 0;
+  std::string tmp = "**empty**";
+  if(inst_methods_manager)
+    tmp = inst_methods_manager->method_name(index);
 
-  for(rowIterator = values.begin(); rowIterator != values.end(); ++rowIterator)
-    {
-    for(cellIterator = rowIterator->begin(); cellIterator != rowIterator->end(); ++cellIterator)
-      {
-	if(i<sudoku_size)
-	  {
-	    myCells[i]->set_value(*cellIterator);
-	  }
-	i++;
-	col++;
-      }
-    row++;
-    col = 0;
-    }
-  return 0;
+  return tmp;
+}
+std::string resolver::method_status(int index)
+{
+  std::string tmp = "**empty**";
+  if(inst_methods_manager)
+    tmp = inst_methods_manager->method_status(index);
+
+  return tmp;
+}
+std::string resolver::method_description(int index)
+{
+  std::string tmp = "**empty**";
+  if(inst_methods_manager)
+    tmp = inst_methods_manager->method_description(index);
+
+  return tmp;
 }
 
-int  resolver::analyze()
-{
-  int sollution = 0;
-  //resolvMethod* myMethod = NULL;
-  std::string status;
+/*!cells related functions*/
 
-  while(myPluginManager->useMethod(myCells,sollution,status) > 0)
-    {      
-      vStatus.push_back(status);
+stcell_coordinates resolver::cell_coordinates(int index)
+{
+  stcell_coordinates = new_coordinates {-1,-1};
+  if(inst_cells && index < inum_cells && index >= 0)
+    {
+      new_coordinates.x = inst_cells[index]->x();
+      new_coordinates.y = inst_cells[index]->y();
     }
 
-  return sollution;
+  return new_coordinates;
 }
 
-std::vector< std::vector<std::string> > resolver::getCurrent()
+void resolver::set_cell_coordinates(int index, int x, int y)
 {
-  std::vector< std::vector<std::string> > currentValues;
-  std::vector<std::string> currentRow;
-  int i = 0;
-  int icurrent_field = 0;
+  if(inst_cells && index < inum_cells && index >= 0)
+      inst_cells[index]->set_coordinates(x,y);
 
-  while(i < sudoku_size)
-    {
-      if(icurrent_field >= 9)
-	{
-	  currentValues.push_back(currentRow);
-	  currentRow.clear();
-	  icurrent_field = 0;
-	}
-      currentRow.push_back(myCells[i]->retPrettyStatus());
-      i++;
-      icurrent_field++;
-    }
-  if(icurrent_field >= 9)
-    {
-      currentValues.push_back(currentRow);
-      currentRow.clear();
-      icurrent_field = 0;
-    }
-      
-  return currentValues;
+  return;
 }
 
-int resolver::resolveOne()
+stcell_position resolver::cell_position(int index)
 {
-  int solved = 0;
-  int i = 0;
-  while(i<sudoku_size && !solved)
+  stcell_position = new_position {-1,-1};
+  if(inst_cells && index < inum_cells && index >= 0)
     {
-      if(myCells[i]->hasSollution())
-	if(myCells[i]->solve())
-	  solved = 1;
-      i++;
+      new_position.col = inst_cells[index]->col();
+      new_position.row = inst_cells[index]->row();
     }
-  return solved;
+
+  return new_position;
+}
+
+void resolver::set_cell_position(int index, int col, int row)
+{
+  if(inst_cells && index < inum_cells && index >= 0)
+      inst_cells[index]->set_position(col,row);
+
+  return;
+}
+
+int resolver::cell_value(int index)
+{
+  int value = -1;
+  if(inst_cells && index < inum_cells && index >= 0)
+    value = inst_cells[index]->ret_value();
+
+  return value;
 }

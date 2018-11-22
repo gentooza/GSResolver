@@ -28,7 +28,7 @@ along with GSResolver.  If not, see <https://www.gnu.org/licenses/>.
 #include <time.h>
 
 #include "defines.h"
-#include "cell.h"
+#include "resolver.h"
 #include "tools.h"
 
 #ifndef _GUI_
@@ -50,7 +50,8 @@ enum options
 };
 enum actions
   {
-    ACT_ASK_FOR_PLUGINS = 1000,
+    ACT_NONE = 1000,
+    ACT_ASK_FOR_PLUGINS,
     ACT_RESOLVE_ROUND
   };
 
@@ -80,7 +81,7 @@ class gui
   gui(std::string appVersion);
   ~gui();
 
-  void initGui(cell**& cells_map);
+  void initGui(resolver*& my_resolver);
   
   int getOption();
 
@@ -88,35 +89,35 @@ class gui
 
   void showInfo();
   //REFRESHING GUI
-  void show_gui(cell **& my_cells,std::vector<struct method_info> information);
+  void show_gui(resolver*& my_resolver);
   //
   void showDescription();
   
   //drawing functions
-  void draw_windows(int status, cell **& my_cells, std::vector<struct method_info> information);
+  void draw_windows(int state, resolver*& my_resolver);
   void draw_title();
   void draw_options(int state);
-  void draw_map(cell **& cells_map,int status);
-  void draw_plugins(std::vector<struct method_info> information);
+  void draw_map(int state,resolver*& my_resolver);
+  void draw_plugins(resolver*& my_resolver);
   void draw_info();
   void draw_cursor(int state,cell **& my_cells);
   //////////////
 
-  int eval_keyboard_input( cell ** map_cells,std::vector<struct method_info> information);
+  int eval_keyboard_input( resolver*& my_resolver);
   
   int isNotFinished(){return not_finished;};
 
   void print_message(std::string text);
   void print_message(char option, int msg_type);
-  void print_values(cell **& cells_map,int start_x, int start_y);
-  int  print_one_plugin(struct method_info method,int coordinate_x, int coordinate_y ,int height, int width);
+  void print_values(resolver*& my_resolver,int start_x, int start_y);
+  int  print_one_plugin(resolver*& my_resolver,int selected,int coordinate_x, int coordinate_y ,int height, int width);
 
   //ACTIONS ON CELLS
-  int  move_left(cell **&cells_map);
-  int  move_right(cell **&cells_map);
-  int  move_up(cell **&cells_map);
-  int  move_down(cell **&cells_map);
-  int  set_value(cell **&cells_map, int value);
+  int  move_left(resolver*& my_resolver);
+  int  move_right(resolver*& my_resolver);
+  int  move_up(resolver*& my_resolver);
+  int  move_down(resolver*& my_resolver);
+  int  set_value(resolver*& my_resolver, int value);
   //
 
   //////////////////////////////////////////////
@@ -128,7 +129,7 @@ class gui
   std::vector <std::string> vBadThings;
   std::string sVersion;
   std::vector<std::string> my_information;
-  int gui_status;
+  int gui_state;
   int not_finished;
   int selected_cell;
   unsigned int iround;

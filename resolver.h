@@ -30,31 +30,43 @@ along with GSResolver.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef _RESOLVER_
 #define _RESOLVER_
 
+struct stcell_coordinates
+{
+  int x;
+  int y;
+};
+struct stcell_position
+{
+  int col;
+  int row;
+};
+
+/*!FACADE class, managing the cell map and plugins and merging the external interface of them*/
 class resolver
 {
  public:
   resolver();
   ~resolver();
+ 
+  //methods
+  void load_methods();
+  int num_methods(){int methods; (inst_methods_manager?methods=inst_methods_manager->num_plugins():methods=-1) return methods;};
+  std::string method_name(int index);
+  //cells
+  stcell_coordinates cell_coordinates(int index);
+  void set_cell_coordinates(int index,int x, int y);
+  stcell_position cell_position(int index);
+  void set_cell_position(int index,int col, int row);
 
-  std::vector<struct method_info> load_methods();
-  
-  int setValues(std::vector< std::vector<int> > values);
-  int analyze();
-  std::vector< std::vector <std::string> > getCurrent();
-  cell ** getCurrentCells(){return myCells;};
-  
-  void getCurrentStatus(std::vector <std::string> & status){status.clear(); status = vStatus;};
-  void clearStatus(){vStatus.clear();};
-  void newRound(){iRound++;vStatus.clear();std::string message = "Round "; message += std::to_string(iRound); vStatus.push_back(message);};
-  int resolveOne();
-    
+  int cell_value(int index);
 
  private:
-  cell ** myCells;
+  int inum_cells;
+  cell ** inst_cells;
   int iRound;
   std::vector <std::string> vStatus;
   int hasSollution;
-  methodsManager* myPluginManager;
+  methodsManager* inst_methods_manager;
   
 };
 

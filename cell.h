@@ -50,12 +50,12 @@ class cell
   std::string retPrettyStatus();
 
   void set_position(int col, int row);
-  int ret_col(){return iCol;};
-  int ret_row(){return iRow;};
+  int col(){return iCol;};
+  int row(){return iRow;};
   
   void set_coordinates(int x, int y){GUI_coordinate_x=x; GUI_coordinate_y=y;};
-  int ret_y(){return GUI_coordinate_y;};
-  int ret_x(){return GUI_coordinate_x;};
+  int y(){return GUI_coordinate_y;};
+  int x(){return GUI_coordinate_x;};
   
   std::vector<int> retPos();
   

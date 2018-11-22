@@ -97,13 +97,13 @@ void methodsManager::search_plugins_folders(std::vector <std::string>  & folders
 }
 void methodsManager::free_plugins()
 {
-  if(num_methods)
+  if(inum_methods)
     {
-      for(int i=num_methods-1; i >= 0;i--)
+      for(int i=inum_methods-1; i >= 0;i--)
 	{
-	  delete my_methods[i];
+	  delete inst_methods[i];
 	}
-      delete my_methods;      
+      delete inst_methods;      
     }
   
   return;
@@ -115,11 +115,11 @@ void methodsManager::load_plugins()
   std::vector <std::string> plugins_list;
   std::vector <std::string>::iterator iter; 
 
-  num_methods = 0;
+  inum_methods = 0;
   search_plugins_folders(plugins_list);
   if(plugins_list.size())
     {
-      my_methods = new method*[plugins_list.size()];
+      inst_methods = new method*[plugins_list.size()];
       int i=0;
       for(iter = plugins_list.begin(); iter != plugins_list.end(); ++iter)
 	{
@@ -128,12 +128,12 @@ void methodsManager::load_plugins()
 	  path += "/";
 	  path += *iter;
 	  path += ".so";
-	  my_methods[i] = new method();
-	  my_methods[i]->set_path(path);
-	  my_methods[i]->my_so =  dlopen(path.c_str(), RTLD_LAZY);
+	  inst_methods[i] = new method();
+	  inst_methods[i]->set_path(path);
+	  inst_methods[i]->my_so =  dlopen(path.c_str(), RTLD_LAZY);
 	  std::string status = "Plugin correctly loaded";	  
 	  //loading symbols
-	  if (!my_methods[i]->my_so) //ERROR
+	  if (!inst_methods[i]->my_so) //ERROR
 	    {
 	      std::string error = dlerror();
 	      status = "ERR: Cannot open library: ";
@@ -141,95 +141,26 @@ void methodsManager::load_plugins()
 	      status += " CAUSE: ";
 	      status += error;
 	      //std::cerr << status << "\n";
-	      my_methods[i]->set_status(status);
-	      my_methods[i]->set_error(error);
+	      inst_methods[i]->set_status(status);
+	      inst_methods[i]->set_error(error);
 	    }
 	  else	  //loading symbols if NO ERROR
 	    {
-	      my_methods[i]->set_error("NO");
-	      if(my_methods[i]->load())
+	      inst_methods[i]->set_error("NO");
+	      if(inst_methods[i]->load())
 		{
 		  status = "ERR: Cannot Load library: ";
 		  status += path;
 		  status += " CAUSE: Bad plugin format, not following standards";
-		  my_methods[i]->set_error("Bad plugin format, not following standards");
+		  inst_methods[i]->set_error("Bad plugin format, not following standards");
 		}	      
 	    }
-	  my_methods[i]->refresh_info(*iter,"**nothing**");
-	  my_methods[i]->set_status(status);
+	  inst_methods[i]->refresh_info(*iter,"**nothing**");
+	  inst_methods[i]->set_status(status);
 	  i++;
 	}
-      num_methods = i;
+      inum_methods = i;
     }
-}
-
-int methodsManager::useMethod(cell **& myCells, int & sollution, std::string & status)
-{
-  int isIt = 0;
-  /*resolvMethod* myMethod = NULL;
-  
-  if(viActualMethod != vMethodsInSystem.end())
-    {
-      isIt=1;
-      // load the symbols
-      create_pluginInstance = (create_t*) dlsym(*viActualMethod, "create");
-      const char* dlsym_error = dlerror();
-      if (dlsym_error) {
-	std::cerr << "ERR: Cannot load symbol create: " << dlsym_error << '\n';
-        isIt= 0;
-      }
-    
-      destroy_pluginInstance = (destroy_t*) dlsym(*viActualMethod, "destroy");
-      dlsym_error = dlerror();
-      if (dlsym_error) {
-	std::cerr << "ERR: Cannot load symbol destroy: " << dlsym_error << '\n';
-        isIt= 0;
-      }
-      if(isIt)
-	{
-	  myMethod = create_pluginInstance();
-	  if(!myMethod->analyze(myCells))
-	    {
-	      sollution += myMethod->hasSollution(myCells);
-	      status = "using method:  ";
-	      status +=  myMethod->retMethodName();
-	      status += " got sollution?...";
-	      if(sollution)
-		status += "yes";
-	      else
-		status += "no";
-	    }
-	  else
-	    {
-	      status = "ERR: method  ";
-	      status +=  myMethod->retMethodName();
-	      status += " couldn't be used, reason?";	      
-	    }
-	  destroy_pluginInstance(myMethod);
-	  myMethod = NULL;
-	}
-      ++viActualMethod;
-    }
-  else
-    {
-      viActualMethod = vMethodsInSystem.begin();
-      isIt=0;
-    }
-  */
-  return isIt;
-
-}
-
-std::vector<struct method_info> methodsManager::ret_plugins_information()
-{
-  std::vector<struct method_info> information;
-  for(int i=0; i <num_methods; i++)
-    {
-      information.push_back({my_methods[i]->ret_name(),my_methods[i]->ret_description(), my_methods[i]->ret_is_loaded(), my_methods[i]->ret_status(), my_methods[i]->ret_error()});
-    }
-
-  return information;
-
 }
 
 base_method* methodsManager::createMethod()
@@ -243,3 +174,27 @@ void methodsManager::destroyMethod(base_method* myPlugin)
     destroy_pluginInstance(myPlugin);
 }
 
+std::string method_name(int index)
+{
+  std::string name = "**empty**";
+  if(inst_methods && index < inum_methods && index >= 0)
+    name = inst_methods[index]->ret_name();
+
+  return name;
+}
+std::string method_status(int index)
+{
+  std::string status = "**empty**";
+  if(inst_methods && index < inum_methods && index >= 0)
+    name = inst_methods[index]->ret_status();
+
+  return name;
+}
+std::string method_description(int index)
+{
+  std::string description = "**empty**";
+  if(inst_methods && index < inum_methods && index >= 0)
+    name = inst_methods[index]->ret_dscription();
+
+  return name;
+}

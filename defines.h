@@ -36,4 +36,10 @@ struct method_info
   std::string err;
 };
 
+struct resolver_status
+{
+  unsigned int resolved;
+  
+};
+
 #endif
