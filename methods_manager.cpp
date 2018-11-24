@@ -17,7 +17,7 @@ You should have received a copy of the GNU General Public License
 along with GSResolver.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#include"methodsManager.h"
+#include"methods_manager.h"
 
 
 method::~method()
@@ -68,7 +68,7 @@ void method::refresh_info(std::string default_name, std::string default_descript
     }
 }
 
-void methodsManager::search_plugins_folders(std::vector <std::string>  & folders)
+void methods_manager::search_plugins_folders(std::vector <std::string>  & folders)
 {
   folders.clear();
   const char* PATH = "./methods";
@@ -95,7 +95,7 @@ void methodsManager::search_plugins_folders(std::vector <std::string>  & folders
 
   return;
 }
-void methodsManager::free_plugins()
+void methods_manager::free_plugins()
 {
   if(inum_methods)
     {
@@ -110,7 +110,7 @@ void methodsManager::free_plugins()
 }
 
 
-void methodsManager::load_plugins()
+void methods_manager::load_plugins()
 {
   std::vector <std::string> plugins_list;
   std::vector <std::string>::iterator iter; 
@@ -163,18 +163,18 @@ void methodsManager::load_plugins()
     }
 }
 
-base_method* methodsManager::createMethod()
+base_method* methods_manager::createMethod()
 {
   return create_pluginInstance();
 }
 
-void methodsManager::destroyMethod(base_method* myPlugin)
+void methods_manager::destroyMethod(base_method* myPlugin)
 {
   if (myPlugin)
     destroy_pluginInstance(myPlugin);
 }
 
-std::string method_name(int index)
+std::string methods_manager::method_name(int index)
 {
   std::string name = "**empty**";
   if(inst_methods && index < inum_methods && index >= 0)
@@ -182,7 +182,7 @@ std::string method_name(int index)
 
   return name;
 }
-std::string method_status(int index)
+std::string methods_manager::method_status(int index)
 {
   std::string status = "**empty**";
   if(inst_methods && index < inum_methods && index >= 0)
@@ -190,7 +190,7 @@ std::string method_status(int index)
 
   return name;
 }
-std::string method_description(int index)
+std::string methods_manager::method_description(int index)
 {
   std::string description = "**empty**";
   if(inst_methods && index < inum_methods && index >= 0)

@@ -62,11 +62,11 @@ class method
 
 
 
-class methodsManager
+class methods_manager
 {
  public:
- methodsManager(){num_methods = 0;};
-  ~methodsanager(){};
+ methods_manager(){inum_methods = 0;};
+  ~methods_manager(){};
 
   void load_plugins();
   void free_plugins();

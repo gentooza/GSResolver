@@ -29,7 +29,7 @@ resolver::resolver()
   vStatus.clear();
   iRound = 0;
   vStatus.push_back("Round 0, original and possible values only");
-  inst_methods_manager = new methodsManager();
+  inst_methods_manager = new methods_manager();
   return;
 }
 resolver::~resolver()

@@ -58,15 +58,12 @@ int main()
 	  //TODO
 	  //our_resolver->resolve_round();
 	}
-      our_gui->show_gui(cells_map,methods_information);
+      our_gui->show_gui(our_resolver);
 
     }
   
   delete our_gui;
   delete our_resolver;
-  for (int i=80 ; i>=0; i--)
-    delete cells_map[i];
-  delete cells_map;
 
   return 0;
 }

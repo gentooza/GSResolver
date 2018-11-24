@@ -24,7 +24,7 @@ along with GSResolver.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "defines.h"
 #include "cell.h"
-#include "methodsManager.h"
+#include "methods_manager.h"
 
 
 #ifndef _RESOLVER_
@@ -50,8 +50,12 @@ class resolver
  
   //methods
   void load_methods();
-  int num_methods(){int methods; (inst_methods_manager?methods=inst_methods_manager->num_plugins():methods=-1) return methods;};
+  int num_methods(){int methods; (inst_methods_manager?methods=inst_methods_manager->num_methods():methods=-1); return methods;};
   std::string method_name(int index);
+  std::string method_status(int index);
+  std::string method_description(int index);
+
+  
   //cells
   stcell_coordinates cell_coordinates(int index);
   void set_cell_coordinates(int index,int x, int y);
@@ -66,7 +70,7 @@ class resolver
   int iRound;
   std::vector <std::string> vStatus;
   int hasSollution;
-  methodsManager* inst_methods_manager;
+  methods_manager* inst_methods_manager;
   
 };
 
