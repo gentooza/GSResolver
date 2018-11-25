@@ -61,8 +61,13 @@ class resolver
   void set_cell_coordinates(int index,int x, int y);
   stcell_position cell_position(int index);
   void set_cell_position(int index,int col, int row);
-
   int cell_value(int index);
+  void set_cell_value(int index,int value);
+
+  int value_possible_in_col(int selected_cell,int value);
+  int value_possible_in_row(int selected_cell,int value);
+  int value_possible_in_section(int selected_cell,int value);
+  int value_possible(int selected_cell,int value);
 
  private:
   int inum_cells;

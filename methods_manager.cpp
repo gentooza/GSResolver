@@ -186,15 +186,15 @@ std::string methods_manager::method_status(int index)
 {
   std::string status = "**empty**";
   if(inst_methods && index < inum_methods && index >= 0)
-    name = inst_methods[index]->ret_status();
+    status = inst_methods[index]->ret_status();
 
-  return name;
+  return status;
 }
 std::string methods_manager::method_description(int index)
 {
   std::string description = "**empty**";
   if(inst_methods && index < inum_methods && index >= 0)
-    name = inst_methods[index]->ret_dscription();
+    description = inst_methods[index]->ret_description();
 
-  return name;
+  return description;
 }

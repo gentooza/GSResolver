@@ -233,9 +233,9 @@ void gui::draw_plugins(resolver*& my_resolver)
   if(selected_plugin)
     mvwprintw(win_map,11,1,"<");
 
-  if(selected_plugin < (my_resolver->num_plugins()-1))
+  if(selected_plugin < (my_resolver->num_methods()-1))
     mvwprintw(win_map,11,(COLS/2 -2),">");
-  if(selected_plugin >=0 && selected_plugin < my_resolver->num_plugins())
+  if(selected_plugin >=0 && selected_plugin < my_resolver->num_methods())
     print_one_plugin(my_resolver,selected_plugin,3,3,20,COLS/2-2);
 }
 
@@ -259,11 +259,13 @@ void gui::draw_cursor(int state,resolver*& my_resolver)
   switch(state)
     {
     case(GUI_EDITION):
-      stcell_coordinates my_coordinates = my_resolver->cell_coordinates(selected_cell);
-      wmove(win_map, my_coordinates.y,my_coordinates.x);
-      keypad(win_info,FALSE);
-      keypad(win_map,TRUE);
-      break;
+      {
+	stcell_coordinates my_coordinates = my_resolver->cell_coordinates(selected_cell);
+	wmove(win_map, my_coordinates.y,my_coordinates.x);
+	keypad(win_info,FALSE);
+	keypad(win_map,TRUE);
+	break;
+      }
     default:
       wmove(win_info,1,8);
       keypad(win_map,FALSE);
@@ -418,7 +420,7 @@ void   gui::print_values(resolver*& my_resolver,int start_x, int start_y)
     {
       for(int column = 1; column <= 9; column++)
 	{
-	  my_resolver->set_cell_coordinates(coordinate_x,coordinate_y);
+	  my_resolver->set_cell_coordinates(index,coordinate_x,coordinate_y);
 	  my_resolver->set_cell_position(index,column,row);
 	  value =  my_resolver->cell_value(index);
 	  if(value)
@@ -613,7 +615,7 @@ int gui::set_value(resolver*& my_resolver, int value)
       if(value == 0)
 	{
 	  ret=0;
-	  cells_map[selected_cell]->set_value(value);
+	  my_resolver->set_cell_value(selected_cell,value);
 	  //print_message("value to 0");
 	}
       else
@@ -623,11 +625,11 @@ int gui::set_value(resolver*& my_resolver, int value)
 	  message += " val ";
 	  message += std::to_string(value);
 
-	  ret = tools_value_possible(cells_map,selected_cell,value);
+	  ret =  my_resolver->value_possible(selected_cell,value);
 	  if(ret > 0)
 	    {
 	      message += "... possible!";
-	      cells_map[selected_cell]->set_value(value);
+	      my_resolver->set_cell_value(selected_cell,value);
 	      ret=0;
 	    }
 	  else
@@ -652,9 +654,9 @@ int gui::set_value(resolver*& my_resolver, int value)
 
 void gui::set_gui_state(int state)
 {
-  gui_status = state;
+  gui_state = state;
   //OPTIONS
-  draw_options(gui_status);
+  draw_options(gui_state);
   //information feedback
   draw_info();
 }

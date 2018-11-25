@@ -26,12 +26,6 @@ along with GSResolver.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef _TOOLS_
 #define _TOOLS_
 
-int tools_value_possible_in_col(cell **& cells_map,int selected_cell,int value);
-int tools_value_possible_in_row(cell **& cells_map,int selected_cell,int value);
-int tools_value_possible_in_section(cell **& cells_map,int selected_cell,int value);
-int tools_value_possible(cell **& cells_map,int selected_cell,int value);
-
-
 //TEXT TOOLS
 std::vector<std::string> ret_paragraph_with_lines_return(std::string original,unsigned int line_width, int max_lines);
 

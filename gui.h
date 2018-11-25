@@ -100,7 +100,7 @@ class gui
   void draw_map(int state,resolver*& my_resolver);
   void draw_plugins(resolver*& my_resolver);
   void draw_info();
-  void draw_cursor(int state,cell **& my_cells);
+  void draw_cursor(int state,resolver*& my_resolver);
   //////////////
 
   int eval_keyboard_input( resolver*& my_resolver);
