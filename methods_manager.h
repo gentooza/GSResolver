@@ -26,7 +26,8 @@ along with GSResolver.  If not, see <https://www.gnu.org/licenses/>.
 #include <iterator>
 #include <string.h>
 
-#include"./methods/base_method.h"
+#include "./methods/base_method.h"
+#include "cell.h"
 
 class method
 {
@@ -41,6 +42,7 @@ class method
   void *my_so;
   int load();
   void refresh_info(std::string default_name, std::string default_description);
+  std::string resolve(cell **&);
 
   std::string ret_name(){return name;};
   std::string ret_description(){return description;};
@@ -70,14 +72,14 @@ class methods_manager
 
   void load_plugins();
   void free_plugins();
-  base_method* createMethod();
-  void destroyMethod(base_method*);
 
   int num_methods(){return inum_methods;};
   
   std::string method_name(int index);
   std::string method_status(int index);
   std::string method_description(int index);
+
+  std::string resolve(int method_to_use,cell**&);
 
  protected:
   void search_plugins_folders(std::vector <std::string> &);

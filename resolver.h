@@ -41,7 +41,7 @@ struct stcell_position
   int row;
 };
 
-/*!FACADE class, managing the cell map and plugins and merging the external interface of them*/
+/*!mediator class, managing the cell map and plugins and merging the external interface of them*/
 class resolver
 {
  public:
@@ -58,7 +58,6 @@ class resolver
   std::string method_status(int index);
   std::string method_description(int index);
 
-  
   //cells
   stcell_coordinates cell_coordinates(int index);
   void set_cell_coordinates(int index,int x, int y);
@@ -72,11 +71,14 @@ class resolver
   int value_possible_in_section(int selected_cell,int value);
   int value_possible(int selected_cell,int value);
 
+  //status //TODO to improve as external class
+  std::vector<std::string> status(){return vstatus;};
+
  private:
   int inum_cells;
   cell ** inst_cells;
-  int iRound;
-  std::vector <std::string> vStatus;
+  int iround;
+  std::vector <std::string> vstatus;
   int hasSollution;
   methods_manager* inst_methods_manager;
   

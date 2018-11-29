@@ -67,6 +67,27 @@ void method::refresh_info(std::string default_name, std::string default_descript
       description = default_description;
     }
 }
+std::string method::resolve(cell **& cells)
+{
+  int ret_value;
+  std::string message = "USING:ret_name()";
+  if(is_loaded)
+    {
+      base_method* myMethod = create_plugin_instance();
+      ret_value = myMethod->analyze(cells);
+      ret_value = myMethod->has_sollution(cells);
+      destroy_plugin_instance(myMethod);      
+      if(ret_value)
+	message += "-FOUND VALUE";
+      else
+	message += "-NOTHING";
+    }
+  else
+    {
+      message += "-NOT LOADED";
+    }
+  return message;
+}
 
 void methods_manager::search_plugins_folders(std::vector <std::string>  & folders)
 {
@@ -163,17 +184,6 @@ void methods_manager::load_plugins()
     }
 }
 
-base_method* methods_manager::createMethod()
-{
-  return create_pluginInstance();
-}
-
-void methods_manager::destroyMethod(base_method* myPlugin)
-{
-  if (myPlugin)
-    destroy_pluginInstance(myPlugin);
-}
-
 std::string methods_manager::method_name(int index)
 {
   std::string name = "**empty**";
@@ -197,4 +207,14 @@ std::string methods_manager::method_description(int index)
     description = inst_methods[index]->ret_description();
 
   return description;
+}
+/*! function for resolving sudoku with the selected method (by index)*/
+std::string methods_manager::resolve(int method_to_use, cell **& cells)
+{
+  std::string message = "BAD INDEX:"+ std::to_string(method_to_use);
+  if(method_to_use < inum_methods)
+    {
+      message = inst_methods[method_to_use]->resolve(cells);   
+    }
+  return message;
 }

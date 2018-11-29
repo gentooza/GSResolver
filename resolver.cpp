@@ -26,9 +26,8 @@ resolver::resolver()
   inum_cells = sudoku_size;
   for (int i=0; i < sudoku_size; i++)
     inst_cells[i] = new cell();
-  vStatus.clear();
-  iRound = 0;
-  vStatus.push_back("Round 0, original and possible values only");
+  vstatus.clear();
+  iround = 0;
   inst_methods_manager = new methods_manager();
   return;
 }
@@ -42,6 +41,15 @@ resolver::~resolver()
   return;
 }
 
+/*!sudoku solving*/
+int resolver::resolve_round()
+{
+  std::string message = "Round:" + std::to_string(iround);
+  vstatus.push_back(message);
+  for(int i=0; i < num_methods(); i++)
+    vstatus.push_back(inst_methods_manager->resolve(i,inst_cells));
+  iround++;
+}
 /*!methods related functions*/
 void resolver::load_methods()
 {

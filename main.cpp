@@ -55,8 +55,7 @@ int main()
 	}
       if(action_to_do == ACT_RESOLVE_ROUND)
 	{
-	  //TODO
-	  //our_resolver->resolve_round();
+	  our_resolver->resolve_round();
 	}
       our_gui->show_gui(our_resolver);
 
