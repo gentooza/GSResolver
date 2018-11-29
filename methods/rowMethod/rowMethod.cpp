@@ -22,17 +22,14 @@ along with GSResolver.  If not, see <https://www.gnu.org/licenses/>.
 #include <limits>
 #include <string>
 
-#include "../resolvMethod.h"
+#include "../base_method.h"
 
 
-class rowMethod : public resolvMethod
+class rowMethod : public base_method
 {
 public:
   virtual int analyze(cell**& cells)
   {
-
-    setMethodName("Simple rows analisys method");
-    setMethodDescription("We remove as possible the values already defined in other fields in same row");
     //square 1
     //cols 0,1,2
     //rows 0,1,2
@@ -65,14 +62,22 @@ public:
       }
     return 0;
   };
+  std::string ret_name()
+  {
+    return "Simple rows analisys method";
+  };
+  std::string ret_description()
+  {
+    return "We remove as possible the values already defined in other fields in same row";
+  }; 
 };
 
 // the class factories
 
-extern "C" resolvMethod* create() {
+extern "C" base_method* create() {
   return new rowMethod;
 }
 
-extern "C" void destroy(resolvMethod* p) {
+extern "C" void destroy(base_method* p) {
   delete p;
 }
