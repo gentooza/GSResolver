@@ -24,13 +24,11 @@ along with GSResolver.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "../base_method.h"
 
-
 class squareMethod : public base_method
 {
 public:
   virtual int analyze(cell**& cells)
   {
-
     //square 1
     //cols 0,1,2
     //rows 0,1,2
