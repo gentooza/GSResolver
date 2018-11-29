@@ -47,6 +47,9 @@ class resolver
  public:
   resolver();
   ~resolver();
+
+  //solving
+  int resolve_round();
  
   //methods
   void load_methods();
