@@ -73,7 +73,8 @@ class resolver
 
   //status //TODO to improve as external class
   std::vector<std::string> status(){return vstatus;};
-
+  //
+  int round(){return iround;};
  private:
   int inum_cells;
   cell ** inst_cells;

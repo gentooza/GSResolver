@@ -121,13 +121,14 @@ void gui::draw_windows(int state, resolver*& my_resolver)
     {
       draw_title();
     }
-  switch(gui_state)
+  switch(state)
     {
     case(GUI_RESOLVING):
+      iround = my_resolver->round();
     case(GUI_EDITION):
       draw_options(state);
       draw_info();
-      draw_map(gui_state,my_resolver);
+      draw_map(state,my_resolver);
       break;
     case(GUI_PLUGIN_MANAGEMENT):
       draw_options(state);
@@ -136,7 +137,7 @@ void gui::draw_windows(int state, resolver*& my_resolver)
       break;
     default: //main window
       draw_options(state);
-      draw_map(gui_state,my_resolver);
+      draw_map(state,my_resolver);
       draw_info();
       break;
     };
