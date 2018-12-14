@@ -45,6 +45,8 @@ int main()
   our_gui->showInfo();
   our_gui->show_gui(our_resolver);
 
+  our_resolver->load_methods();
+  
   while(our_gui->isNotFinished())
     {
       action_to_do = our_gui->eval_keyboard_input(our_resolver);
