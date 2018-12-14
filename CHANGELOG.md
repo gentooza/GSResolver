@@ -1,3 +1,8 @@
+version 0.0.1 (NOT FINISHED)
+---
++ plugin framework working
++ sudoku resollution
+
 ```
 Copyright 2018 Joaquín Cuéllar
 
@@ -16,9 +21,3 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with GSResolver.  If not, see <https://www.gnu.org/licenses/>.
 ```
-
-
-version 0.0.1
----
-+ plugin framework working
-+ sudoku resollution
