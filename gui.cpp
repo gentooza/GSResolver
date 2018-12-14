@@ -178,14 +178,14 @@ void gui::draw_options(int state)
       break;
     case(GUI_RESOLVING):
       mvwprintw(win_options,3,5,"[r] resolve one round");
-      mvwprintw(win_options,4,5,"[R] resolve everything");
-      mvwprintw(win_options,5,5,"[l] show log");      
+      mvwprintw(win_options,4,5,"[l] show log");      
       ////quit
       mvwprintw(win_options,8,5,"[Q] Return and cancel");     
       break;
     case(GUI_EDITION):
       mvwprintw(win_options,3,5,"[1-9] set this number to cell");
-      mvwprintw(win_options,4,5,"[arrow keys] select cell");
+      mvwprintw(win_options,4,5,"[0] unset value of cell");      
+      mvwprintw(win_options,5,5,"[arrow keys] select cell");
       ////quit
       mvwprintw(win_options,8,5,"[Q] Return");
       break;

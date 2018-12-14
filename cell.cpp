@@ -57,6 +57,15 @@ cell::cell()
 int cell::set_value(int value)
 {
   int failed = 1;
+  if(value == 0) //unset cell
+    {
+      iValue = 0;
+      defined = 0;
+      
+      for(int i = 1; i <10 ; i++)
+	if(i!=iValue)
+	  couldBe.push_back(i);
+    }
   if(value > 0  && value < 10)
     {
       iValue = value;
