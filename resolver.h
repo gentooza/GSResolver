@@ -65,6 +65,8 @@ class resolver
   void set_cell_position(int index,int col, int row);
   int cell_value(int index);
   void set_cell_value(int index,int value);
+  int cell_has_sollution(int index);
+  int cell_solve(int index);
 
   int value_possible_in_col(int selected_cell,int value);
   int value_possible_in_row(int selected_cell,int value);

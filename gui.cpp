@@ -37,6 +37,8 @@ int getInt(){
 gui::gui(std::string appVersion)
 {
   initscr();
+  start_color();
+  init_pair(1, COLOR_GREEN, COLOR_BLACK); //colour for just solved cell
   noecho();
   imagineBadThings();
   sVersion = appVersion;
@@ -466,6 +468,7 @@ void   gui::print_values(resolver*& my_resolver,int start_x, int start_y)
   int index = 0;
   int coordinate_x,coordinate_y;
   int value = 0;
+  int possible_done = 0;
   
   coordinate_x = start_x;
   coordinate_y = start_y;
@@ -478,6 +481,22 @@ void   gui::print_values(resolver*& my_resolver,int start_x, int start_y)
 	  value =  my_resolver->cell_value(index);
 	  if(value)
 	    mvwprintw(win_map,coordinate_y,coordinate_x,"%d",value);
+	  else if(!possible_done)
+	    {
+	      //possible?
+	      if(my_resolver->cell_has_sollution(index))
+		{
+		  my_resolver->cell_solve(index);
+		  value =  my_resolver->cell_value(index);
+		  if(value)
+		    {
+		      wattron(win_map,COLOR_PAIR(1));
+		      mvwprintw(win_map,coordinate_y,coordinate_x,"%d",value);
+		      wattroff(win_map,COLOR_PAIR(1));
+		      possible_done = 1;
+		    }
+		}
+	    }
 	  coordinate_x+=4;
 	  index++;
 	}

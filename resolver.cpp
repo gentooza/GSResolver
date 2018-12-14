@@ -145,7 +145,22 @@ void resolver::set_cell_value(int index,int value)
 
   return;
 }
-
+/*!has cell a sollution?*/
+int resolver::cell_has_sollution(int index)
+{
+  int ret = 0;
+  if(inst_cells && index < inum_cells && index >= 0)
+    ret = inst_cells[index]->hasSollution();
+  return ret;
+}
+/*!solve this cell*/
+int resolver::cell_solve(int index)
+{
+  int ret = 0;
+  if(inst_cells && index < inum_cells && index >= 0)
+    ret = inst_cells[index]->solve();
+  return ret; 
+}
 
 int resolver::value_possible_in_col(int selected_cell,int value)
 {
