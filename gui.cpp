@@ -258,19 +258,28 @@ void gui::draw_log(resolver*& my_resolver)
 {
 
   std::vector< std::string>::reverse_iterator reverse_iter;
+  std::vector<std::string> field;
+  std::vector<std::string>::iterator iter;
   int current_line = 1;
   int total_lines = 21; //TODO
+  int field_line=0;
   
   win_map = newwin(22,COLS/2,1,(COLS/2)); //TODO, dynamic size
   box(win_map, '|', '*');
 
   std::vector< std::string> my_log = my_resolver->status();
-
   
   reverse_iter = my_log.rbegin();
   while(reverse_iter != my_log.rend() && current_line < total_lines)
     {
-      mvwprintw(win_map,current_line,1,reverse_iter->c_str());
+      field = ret_paragraph_with_lines_return(*reverse_iter,COLS/2-2,3);
+      field_line = 0;
+      for(iter = field.begin(); iter != field.end(); ++iter)
+	{
+	  current_line += field_line;
+	  mvwprintw(win_map,current_line,1,iter->c_str());
+	  field_line++;
+	}
       current_line++;
       ++reverse_iter;
     }
