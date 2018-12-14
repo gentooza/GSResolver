@@ -30,7 +30,7 @@ along with GSResolver.  If not, see <https://www.gnu.org/licenses/>.
 
 int main()
 {
-  std::string sVersion = "0.1 ALPHA"; 
+  std::string sVersion = "0.1"; 
   std::vector< std::vector<std::string> > newValues;
   std::vector< std::vector<int> > values;
   std::vector <std::string> status;
