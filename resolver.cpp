@@ -44,10 +44,14 @@ resolver::~resolver()
 /*!sudoku solving*/
 int resolver::resolve_round()
 {
+  int has_sollution = 0;
   std::string message = "Round:" + std::to_string(iround);
   vstatus.push_back(message);
   for(int i=0; i < num_methods(); i++)
-    vstatus.push_back(inst_methods_manager->resolve(i,inst_cells));
+    {
+      vstatus.push_back(inst_methods_manager->resolve(i,inst_cells));
+      
+    }
   iround++;
 }
 /*!methods related functions*/

@@ -60,7 +60,8 @@ enum gui_status
     GUI_MAIN = 0,
     GUI_EDITION,
     GUI_PLUGIN_MANAGEMENT,
-    GUI_RESOLVING
+    GUI_RESOLVING,
+    GUI_RESOLVING_LOG,
   };
 
 enum message_types
@@ -99,6 +100,7 @@ class gui
   void draw_options(int state);
   void draw_map(int state,resolver*& my_resolver);
   void draw_plugins(resolver*& my_resolver);
+  void draw_log(resolver*& my_resolver);  
   void draw_info();
   void draw_cursor(int state,resolver*& my_resolver);
   //////////////

@@ -102,6 +102,7 @@ void gui::show_gui(resolver*& my_resolver)
   wrefresh(win_options);
   switch(gui_state)
     {
+    case(GUI_RESOLVING_LOG):
     case(GUI_PLUGIN_MANAGEMENT):
     case(GUI_EDITION):
       wrefresh(win_info);
@@ -123,6 +124,11 @@ void gui::draw_windows(int state, resolver*& my_resolver)
     }
   switch(state)
     {
+    case(GUI_RESOLVING_LOG):
+      draw_options(state);
+      draw_info();
+      draw_log(my_resolver);
+      break;
     case(GUI_RESOLVING):
       iround = my_resolver->round();
     case(GUI_EDITION):
@@ -163,9 +169,15 @@ void gui::draw_options(int state)
 
   switch(state)
     {
+    case(GUI_RESOLVING_LOG):
+      mvwprintw(win_options,3,5,"[arrows] navigate");     
+      ////quit
+      mvwprintw(win_options,8,5,"[Q] Return for resolving");     
+      break;
     case(GUI_RESOLVING):
       mvwprintw(win_options,3,5,"[r] resolve one round");
       mvwprintw(win_options,4,5,"[R] resolve everything");
+      mvwprintw(win_options,5,5,"[l] show log");      
       ////quit
       mvwprintw(win_options,8,5,"[Q] Return and cancel");     
       break;
@@ -238,6 +250,27 @@ void gui::draw_plugins(resolver*& my_resolver)
     mvwprintw(win_map,11,(COLS/2 -2),">");
   if(selected_plugin >=0 && selected_plugin < my_resolver->num_methods())
     print_one_plugin(my_resolver,selected_plugin,3,3,20,COLS/2-2);
+}
+/*!function for printing resolving log*/
+void gui::draw_log(resolver*& my_resolver)
+{
+
+  std::vector< std::string>::reverse_iterator reverse_iter;
+  int current_line = 1;
+  int total_lines = 21; //TODO
+  
+  win_map = newwin(22,COLS/2,1,(COLS/2)); //TODO, dynamic size
+  box(win_map, '|', '*');
+
+  std::vector< std::string> my_log = my_resolver->status();
+
+  
+  reverse_iter = my_log.rbegin();
+  while(reverse_iter != my_log.rend() && current_line < total_lines)
+    {
+      mvwprintw(win_map,current_line,1,reverse_iter->c_str());
+      current_line++;
+    }
 }
 
 void gui::draw_info()
@@ -365,12 +398,30 @@ int gui::eval_keyboard_input(resolver*& my_resolver)
       option = wgetch(win_info);
       switch(option)
 	{
+	case('l'):
+	  set_gui_state(GUI_RESOLVING_LOG);
+	  break;
 	case('Q'):
 	  //print_message('Q',MSG_CANCEL);
 	  set_gui_state(GUI_MAIN);
 	  break;
 	case('r')://Resolve one round
 	  action_to_do = ACT_RESOLVE_ROUND;
+	  break;
+	default:
+	  print_message(option,MSG_UNKNOWN);
+	  break;
+	}
+    }
+  //in GUI resolving screen
+  else if (gui_state == GUI_RESOLVING_LOG)
+    {
+      option = wgetch(win_info);
+      switch(option)
+	{
+	case('Q'):
+	  //print_message('Q',MSG_CANCEL);
+	  set_gui_state(GUI_RESOLVING);
 	  break;
 	default:
 	  print_message(option,MSG_UNKNOWN);

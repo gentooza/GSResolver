@@ -53,7 +53,7 @@ int main()
 	{
 	  our_resolver->load_methods();
 	}
-      if(action_to_do == ACT_RESOLVE_ROUND)
+      else if(action_to_do == ACT_RESOLVE_ROUND)
 	{
 	  our_resolver->resolve_round();
 	}
