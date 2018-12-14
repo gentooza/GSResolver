@@ -270,6 +270,7 @@ void gui::draw_log(resolver*& my_resolver)
     {
       mvwprintw(win_map,current_line,1,reverse_iter->c_str());
       current_line++;
+      ++reverse_iter;
     }
 }
 

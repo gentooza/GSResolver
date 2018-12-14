@@ -70,7 +70,7 @@ void method::refresh_info(std::string default_name, std::string default_descript
 std::string method::resolve(cell **& cells)
 {
   int ret_value;
-  std::string message = "USING:ret_name()";
+  std::string message = "USING:" + ret_name();
   if(is_loaded)
     {
       base_method* myMethod = create_plugin_instance();

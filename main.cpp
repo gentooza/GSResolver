@@ -58,7 +58,6 @@ int main()
 	  our_resolver->resolve_round();
 	}
       our_gui->show_gui(our_resolver);
-
     }
   
   delete our_gui;

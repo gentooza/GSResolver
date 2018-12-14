@@ -45,7 +45,7 @@ resolver::~resolver()
 int resolver::resolve_round()
 {
   int has_sollution = 0;
-  std::string message = "Round:" + std::to_string(iround);
+  std::string message = "Round:" + std::to_string(iround) + " gonna try:" + std::to_string(num_methods()) + " methods";
   vstatus.push_back(message);
   for(int i=0; i < num_methods(); i++)
     {
