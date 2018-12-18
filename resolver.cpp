@@ -46,12 +46,29 @@ int resolver::resolve_round()
 {
   int has_sollution = 0;
   std::string message = "Round:" + std::to_string(iround) + " gonna try:" + std::to_string(num_methods()) + " methods";
+  std::vector< std::string> cell_matrix;
+  std::vector< std::string>::iterator cell_matrix_iter;
   vstatus.push_back(message);
+  log_txt("********");
+  log_txt(message);
+  log_txt("prev status:");
+  print_beauty(cell_matrix);
+  for(cell_matrix_iter = cell_matrix.begin(); cell_matrix_iter != cell_matrix.end();++cell_matrix_iter)
+    log_txt(*cell_matrix_iter);
+  cell_matrix.clear();     
   for(int i=0; i < num_methods(); i++)
     {
-      vstatus.push_back(inst_methods_manager->resolve(i,inst_cells));
-      
+      log_txt("--------");
+      message = inst_methods_manager->resolve(i,inst_cells);
+      vstatus.push_back(message);
+      log_txt(message);
+      log_txt("new status:");
+      print_beauty(cell_matrix);
+      for(cell_matrix_iter = cell_matrix.begin(); cell_matrix_iter != cell_matrix.end();++cell_matrix_iter)
+	log_txt(*cell_matrix_iter);
+      cell_matrix.clear(); 
     }
+  log_txt("********");
   iround++;
 }
 /*!methods related functions*/
@@ -160,6 +177,58 @@ int resolver::cell_solve(int index)
   if(inst_cells && index < inum_cells && index >= 0)
     ret = inst_cells[index]->solve();
   return ret; 
+}
+/*!print beauty the cells map*/
+void resolver::print_beauty(std::vector<std::string>& message)
+{
+  message.clear();
+  std::string row;
+  int max_length;
+  int cells_row = 9;
+  int j = 0;
+  for(int i = 0; i< inum_cells; i++)
+    {
+      if(j < cells_row)
+	{
+	  row += "|";
+	  print_cell(i,row);
+	  j++;
+	}
+      else
+	{
+	  row += "|";
+	  message.push_back(row);
+	  message.push_back(" ----------  ----------  ----------  ----------  ---------- ---------- ---------- ---------- ---------- ");
+	  j=1;
+	  row = "|";
+	  print_cell(i,row);
+	}
+    }
+  row += "|";
+  message.push_back(row);
+}
+
+void resolver::print_cell(int index,std::string& row_message)
+{
+  std::vector< int> possible_values;
+  std::vector< int>::iterator possible_values_iter;
+  if(inst_cells[index]->ret_value())
+    {
+      row_message += std::to_string(inst_cells[index]->ret_value());
+      row_message += "         ";
+    }
+  else
+    {
+      row_message += ":";
+      possible_values = inst_cells[index]->retCouldBe();
+      for(possible_values_iter = possible_values.begin(); possible_values_iter != possible_values.end(); ++possible_values_iter)
+	{
+	  row_message += std::to_string(*possible_values_iter);
+	}
+      for(int i = possible_values.size(); i <= 10; i++)
+	row_message += " ";
+    }
+
 }
 
 int resolver::value_possible_in_col(int selected_cell,int value)

@@ -21,12 +21,19 @@ along with GSResolver.  If not, see <https://www.gnu.org/licenses/>.
 #include "cell.h"
 #include "defines.h"
 #include <cstring>
-
+#include <fstream> 
+#include <stdio.h>
+#include <time.h>
 
 #ifndef _TOOLS_
 #define _TOOLS_
 
 //TEXT TOOLS
 std::vector<std::string> ret_paragraph_with_lines_return(std::string original,unsigned int line_width, int max_lines);
+
+//DEBUG
+std::string getCurrentDate();
+int log_txt(std::string message);
+
 
 #endif

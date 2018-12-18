@@ -25,6 +25,7 @@ along with GSResolver.  If not, see <https://www.gnu.org/licenses/>.
 #include "defines.h"
 #include "cell.h"
 #include "methods_manager.h"
+#include "tools.h"
 
 
 #ifndef _RESOLVER_
@@ -67,6 +68,8 @@ class resolver
   void set_cell_value(int index,int value);
   int cell_has_sollution(int index);
   int cell_solve(int index);
+  void print_beauty(std::vector<std::string>&);
+  void print_cell(int index,std::string& row_message);
 
   int value_possible_in_col(int selected_cell,int value);
   int value_possible_in_row(int selected_cell,int value);

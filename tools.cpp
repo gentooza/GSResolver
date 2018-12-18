@@ -37,3 +37,73 @@ std::vector<std::string> ret_paragraph_with_lines_return(std::string original,un
   my_paragraph.push_back(tmp);
   return my_paragraph;
 }
+
+std::string getCurrentDate()
+{
+  std::string myDate;
+  std::string myTime;
+  time_t t = time(NULL);
+  tm* timePtr = localtime(&t);
+
+  myDate = std::to_string(timePtr->tm_year+1900);
+  myDate += '-';
+
+  if(timePtr->tm_mon+1 <10)
+      myDate += '0';
+  myDate += std::to_string(timePtr->tm_mon+1);
+  
+  myDate += '-';
+
+  if(timePtr->tm_mday <10)
+      myDate += '0';
+  myDate += std::to_string(timePtr->tm_mday);
+
+  if(timePtr->tm_hour < 10)
+      myTime += '0';
+  myTime += std::to_string(timePtr->tm_hour);
+  
+  myTime += ':';
+  
+  if(timePtr->tm_min < 10)
+      myTime += '0';
+  myTime += std::to_string(timePtr->tm_min);
+
+  myTime += ':';
+  
+  if(timePtr->tm_sec < 10)
+      myTime += '0';
+
+  if(timePtr->tm_sec > 59)
+      myTime += "59";
+  else
+      myTime += std::to_string(timePtr->tm_sec);
+
+  std::string myWhole = myDate + " " + myTime;
+  
+  return myWhole;
+}
+
+int log_txt(std::string message)
+{
+  //TODO, hardcoded
+  std::string path = "./logs";
+  std::string security_check = "mkdir " + path + " &> /dev/null";
+  int ret = 0;
+  std::string file_name = path +  getCurrentDate().substr(0,10) + ".log";  
+  std::ofstream my_file;
+
+  system(security_check.c_str());
+  my_file.open(file_name,std::ios::app);
+
+  if(my_file.is_open())
+    {
+      my_file << getCurrentDate().substr(11) << " > " << message << "\n";
+      ret = 0;
+    }
+  else
+    ret = 1;
+
+  my_file.close();
+
+  return ret;
+}
