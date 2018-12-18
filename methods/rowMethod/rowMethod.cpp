@@ -30,35 +30,23 @@ class rowMethod : public base_method
 public:
   virtual int analyze(cell**& cells)
   {
-    //square 1
-    //cols 0,1,2
-    //rows 0,1,2
-    //square 2
-    //cols 3,4,5
-    //rows 0,1,2
-    //etc...
-    int col_min = 0, col_max = 0, row_min = 0,row_max = 0;
     std::vector<int> definedNums;
     std::vector<int>::iterator iterDefinedNums;
-    std::vector <int> coordinates;
-    for(int row = 0 ; row < 9 ; row++)
+    for(int row = 1 ; row <= 9 ; row++)
       {        
 	for(int i = 0; i < sudoku_size ; i++)
-	  {	  
-	    coordinates = cells[i]->retPos();	
-	    if(coordinates.at(1) == row) //row
+	  {	
+	    if(cells[i]->row() == row) //row
 	      if(cells[i]->retDefined())
 		definedNums.push_back(cells[i]->ret_value());
 	  }
 	for(int i = 0; i < sudoku_size ; i++)
-	  {
-	    coordinates = cells[i]->retPos();
-	    if(coordinates.at(1) == row) //row
+	  {	  
+	    if(cells[i]->row() == row) //row
 	      if(!cells[i]->retDefined())
 		cells[i]->removeFrmCouldBe(definedNums);
 	  }
 	definedNums.clear();
-	coordinates.clear();
       }
     return 0;
   };

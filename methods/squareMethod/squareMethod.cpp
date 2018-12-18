@@ -30,11 +30,11 @@ public:
   virtual int analyze(cell**& cells)
   {
     //square 1
-    //cols 0,1,2
-    //rows 0,1,2
+    //cols 1,2,3
+    //rows 1,2,3
     //square 2
-    //cols 3,4,5
-    //rows 0,1,2
+    //cols 4,6,7
+    //rows 1,2,3
     //etc...
     int col_min = 0, col_max = 0, row_min = 0,row_max = 0;
     std::vector<int> definedNums;
@@ -45,48 +45,48 @@ public:
 	switch(square)
 	  {
 	  case(1):
-	    col_min = row_min = 0;
-	    col_max = row_max = 2;
+	    col_min = row_min = 1;
+	    col_max = row_max = 3;
 	    break;
 	  case(2):
-	    col_min = 3;
-	    col_max = 5;
+	    col_min = 4;
+	    col_max = 6;
 	    break;
 	  case(3):
-	    col_min = 6;
-	    col_max = 8;
+	    col_min = 7;
+	    col_max = 9;
 	  
 	    break;
 	  case(4):
-	    col_min = 0;
-	    col_max = 2;
-	    row_min = 3;
-	    row_max = 5;
+	    col_min = 1;
+	    col_max = 3;
+	    row_min = 4;
+	    row_max = 6;
 	    break;
 	  case(5):
-	    col_min = 3;
-	    col_max = 5;
+	    col_min = 4;
+	    col_max = 6;
 	    break;
 	  case(6):
-	    col_min = 6;
-	    col_max = 8;	  
+	    col_min = 7;
+	    col_max = 9;	  
 	    break;
 	  case(7):
-	    col_min = 0;
-	    col_max = 2;
-	    row_min = 6;
-	    row_max = 8;
+	    col_min = 1;
+	    col_max = 3;
+	    row_min = 7;
+	    row_max = 9;
 	    break;
 	  case(8):
-	    col_min = 3;
-	    col_max = 5;
+	    col_min = 4;
+	    col_max = 6;
 	    break;
 	  case(9):
-	    col_min = 6;
-	    col_max = 8;
+	    col_min = 7;
+	    col_max = 9;
 	    break;
 	  default:
-	    col_min = col_max = row_min = row_max = 0;
+	    col_min = col_max = row_min = row_max = 1;
 	    break;
 	  }
       

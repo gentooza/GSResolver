@@ -30,35 +30,23 @@ class colMethod : public base_method
 public:
   int analyze(cell**& myCells) 
   {
-  
-    //square 1
-    //cols 0,1,2
-    //rows 0,1,2
-    //square 2
-    //cols 3,4,5
-    //rows 0,1,2
-    //etc...
     std::vector<int> definedNums;
     std::vector<int>::iterator iterDefinedNums;
-    std::vector <int> coordinates;
-    for(int col = 0 ; col < 9 ; col++)
+    for(int col = 1 ; col <= 9 ; col++)
       {        
 	for(int i = 0; i < sudoku_size ; i++)
 	  {	  
-	    coordinates = myCells[i]->retPos();	
-	    if(coordinates.at(0) == col) //col
-	      if(myCells[i]->retDefined())
+	    if(myCells[i]->col() == col) //col
+	      if(myCells[i]->ret_value())
 		definedNums.push_back(myCells[i]->ret_value());
 	  }
-	for(int i = 0; i < sudoku_size ; i++)
+	for(int j = 0; j < sudoku_size ; j++)
 	  {
-	    coordinates = myCells[i]->retPos();
-	    if(coordinates.at(0) == col) //col
-	      if(!myCells[i]->retDefined())
-		myCells[i]->removeFrmCouldBe(definedNums);
+	    if(myCells[i]->col() == col) //col
+	      if(!myCells[j]->ret_value())
+		myCells[j]->removeFrmCouldBe(definedNums);
 	  }
 	definedNums.clear();
-	coordinates.clear();
       }
     return 0;
   };
