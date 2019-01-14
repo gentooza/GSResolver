@@ -87,16 +87,17 @@ int log_txt(std::string message)
 {
   //TODO, hardcoded
   std::string path = "./logs";
-  std::string security_check = "mkdir " + path + " &> /dev/null";
+  //std::string security_check = "mkdir " + path + " > /dev/null";
   int ret = 0;
-  std::string file_name = path +  getCurrentDate().substr(0,10) + ".log";  
+  std::string file_name = path + "/" +  getCurrentDate().substr(0,10) + ".log";  
   std::ofstream my_file;
 
-  system(security_check.c_str());
+  mkdir(path.c_str(),755);
+
   my_file.open(file_name,std::ios::app);
 
   if(my_file.is_open())
-    {
+   {
       my_file << getCurrentDate().substr(11) << " > " << message << "\n";
       ret = 0;
     }

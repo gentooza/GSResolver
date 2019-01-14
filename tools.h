@@ -24,6 +24,8 @@ along with GSResolver.  If not, see <https://www.gnu.org/licenses/>.
 #include <fstream> 
 #include <stdio.h>
 #include <time.h>
+#include <sys/stat.h>
+#include <sys/types.h>
 
 #ifndef _TOOLS_
 #define _TOOLS_
