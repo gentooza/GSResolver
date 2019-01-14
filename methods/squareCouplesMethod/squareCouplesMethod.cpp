@@ -45,6 +45,7 @@ public:
 	      it_is = 1;
 	  }
       }
+    return it_is;
   }
   
   virtual int analyze(cell**& cells)

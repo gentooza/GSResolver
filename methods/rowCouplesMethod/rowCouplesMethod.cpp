@@ -45,6 +45,7 @@ public:
 	      it_is = 1;
 	  }
       }
+    return it_is;
   }
   
   virtual int analyze(cell**& cells)
@@ -57,6 +58,7 @@ public:
 	for(int i = 0; i < sudoku_size ; i++)
 	  {	  
 	    if(cells[i]->row() == row) //row
+	      {
 	      if(!cells[i]->ret_value())
 		{
 		  if(cells[i]->retCouldBe().size() == 2) //couple possible here
@@ -73,6 +75,7 @@ public:
 			}
 		    }
 		}
+	      }
 	  }
 	if(definedCouples.size())
 	  {
