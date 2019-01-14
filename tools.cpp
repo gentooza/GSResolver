@@ -92,7 +92,7 @@ int log_txt(std::string message)
   std::string file_name = path + "/" +  getCurrentDate().substr(0,10) + ".log";  
   std::ofstream my_file;
 
-  mkdir(path.c_str(),755);
+  mkdir(path.c_str(),0755);
 
   my_file.open(file_name,std::ios::app);
 
