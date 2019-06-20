@@ -1,3 +1,5 @@
+# THIS IS A MIRROR OF THE OFFICIAL REPOSITORY: [http://git.savannah.nongnu.org/cgit/gsresolver.git]
+
 Gentooza's Sudokus Resolver
 ===========================
 ## Description
